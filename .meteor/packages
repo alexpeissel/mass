@@ -7,3 +7,10 @@
 meteor-platform
 autopublish
 insecure
+cfs:standard-packages
+cfs:gridfs
+cfs:graphicsmagick
+accounts-ui
+accounts-password
+iron:router
+twbs:bootstrap
