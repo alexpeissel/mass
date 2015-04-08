@@ -3,16 +3,29 @@
 </head>
 
 <body>
-  <h1>mass</h1>
-
-  {{>images}}
+  {{> header}}
+  {{> images}}
   {{> uploader}}
 
 </body>
 
+<template name="header">
+    <nav class="navbar navbar-default">
+        <div class="container-fluid">
+            <div class="navbar-header">
+                <a class="navbar-brand logo" href="#">
+                    <img alt="mass" src="/images/placeholder.png">
+                    <h1>mass</h1>
+                </a>
+            </div>
+        </div>
+        {{> loginButtons}}
+    </nav>
+</template>
+
 <template name="detector">
     <p>detector</p>
-    <canvas id="detectorCanvas" style="width: 620px; height: 480px; float: left; border: solid 1px black;"></canvas>
+    <canvas id="detectorCanvas"></canvas>
 </template>
 
 <template name="uploader">
@@ -33,6 +46,7 @@
 
 <template name="photoTile">
     <div class="photo_tile">
+        <div class="col-md-4">
         <div>
             {{#if url store="thumbnail"}}
             {{! if we have a url to the thumbnail store we will display the image}}
@@ -51,6 +65,7 @@
                     <p class="uploadProgress">processing..</p>
                 {{/unless}}
             {{/if}}
+        </div>
         </div>
     </div>
 </template>

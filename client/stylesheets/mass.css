@@ -1,0 +1,28 @@
+.detectorCanvas {
+    background: #CCC;
+    display: block;
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    width: 100%;
+    height: 100%;
+}
+
+.logo {
+    height: 75px;
+    width: 75px;
+}
+
+.photo_tile img {
+    width: 100%;
+}
+
+.photo_tile .uploadProgress {
+    position: absolute;
+    bottom: 10%;
+    left: 5px;
+    right: 5px;
+    text-align: center;
+}

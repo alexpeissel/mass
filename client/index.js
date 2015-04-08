@@ -1,15 +1,44 @@
 if (Meteor.isClient) {
 
+  //http://stackoverflow.com/questions/22418592/bootboxjs-how-to-render-a-meteor-template-as-dialog-body
+  renderTemplate = function (template, data) {
+    var node = document.createElement("div");
+    document.body.appendChild(node);
+    UI.renderWithData(template, data, node);
+    return node;
+  };
+
   Template.detector.rendered = function(){
     console.log("rendered canvas");
     var canvas = document.getElementById("detectorCanvas");
     var context = canvas.getContext("2d");
 
     var image = new Image();
-    image.src = "/images/pic1.jpg";
+    image.src = this.url;
+    console.log(this);
 
     context.drawImage(image, 0, 0, canvas.width, canvas.height);
   }
+
+ Template.photoTile.events({
+   'click': function () {
+     console.log(this);
+       bootbox.dialog({
+         title: 'View image',
+         message: renderTemplate(Template.home),
+         buttons: {
+           do: {
+             label: "ok",
+             className: "btn btn-primary",
+             callback: function() {
+               //take some actions
+             }
+           }
+         }
+       });
+       Blaze.render(Template.detector,$("#detectorNode")[0]);
+     }
+ });
 
   Template.detector.events({
     'click': function () {
@@ -121,5 +150,9 @@ if (Meteor.isClient) {
 if (Meteor.isServer) {
   Meteor.startup(function () {
 
+  });
+
+  Meteor.methods({
+    // methods go here
   });
 }
