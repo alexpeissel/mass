@@ -15,7 +15,7 @@ if (Meteor.isClient) {
 
     var image = new Image();
     image.src = this.url;
-    console.log(this);
+    //console.log(this);
 
     context.drawImage(image, 0, 0, canvas.width, canvas.height);
   }
@@ -25,14 +25,31 @@ if (Meteor.isClient) {
      console.log(this);
        bootbox.dialog({
          title: 'View image',
-         message: renderTemplate(Template.home),
+         message: renderTemplate(Template.detector),
          buttons: {
-           do: {
-             label: "ok",
+           close: {
+             label: "Close",
              className: "btn btn-primary",
              callback: function() {
                //take some actions
              }
+           },
+
+           visualise: {
+             label: "Visualise",
+             className: "btn btn-primary",
+             callback: function() {
+                //take some actions
+             }
+           },
+
+            delete: {
+              label: "Delete",
+              className: "btn btn-danger",
+              callback: function() {
+                console.log(this._id);
+                Images.remove(this._id);
+              }
            }
          }
        });
@@ -139,6 +156,16 @@ if (Meteor.isClient) {
           console.log("Uploaded file: " + file.name);
         });
       });
+    }
+  });
+
+  Template.detector.helpers({
+    currentImage: function () {
+      return Images.find(this._id);
+    },
+
+    log: function () {
+      console.log(this);
     }
   });
 
