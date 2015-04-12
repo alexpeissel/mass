@@ -1,71 +1,57 @@
 <head>
-  <title>mass</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <title>mass</title>
 </head>
 
 <body>
-  {{> header}}
-  {{> images}}
-  {{> uploader}}
+    {{> header}}
+    {{> home}}
+    {{> uploader}}
 
 </body>
 
 <template name="header">
-    <nav class="navbar navbar-default">
+    <nav class="navbar navbar-default navbar-fixed-top">
         <div class="container-fluid">
+            <!-- Brand and toggle get grouped for better mobile display -->
             <div class="navbar-header">
-                <a class="navbar-brand logo" href="#">
-                    <img alt="mass" src="/images/placeholder.png">
-                    <h1>mass</h1>
+                <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1">
+                    <span class="sr-only">Toggle navigation</span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                </button>
+                <a class="navbar-brand" href="#">
+                    <img alt="mass logo" src="/images/placeholder.png">
                 </a>
             </div>
-        </div>
-        {{> loginButtons}}
+
+            <!-- Collect the nav links, forms, and other content for toggling -->
+            <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+                <ul class="nav navbar-nav">
+                    <li class="active"><a href="/">Home <span class="sr-only">(current)</span></a></li>
+                    <li><a href="/gallery">Gallery</a></li>
+                    <li><a href="/products">Products</a></li>
+                    <li><a href="/admin">Admin</a></li>
+                </ul>
+                <ul class="nav navbar-nav navbar-right">
+                    <li>{{> loginButtons}}</li>
+                </ul>
+            </div><!-- /.navbar-collapse -->
+        </div><!-- /.container-fluid -->
     </nav>
 </template>
 
 <template name="detector">
     <p>detector</p>
-    <canvas id="detectorCanvas"></canvas>
+    <canvas id="detectorCanvas" class="detectorCanvas"></canvas>
+        <div id="viewport" class="viewport">
+            <canvas id="viewportCanvas" class="viewportCanvas"></canvas>
+        </div>
 </template>
 
 <template name="uploader">
     <form name="uploadForm">
         <input id="fileInput" type="file" multiple="multiple">
     </form>
-</template>
-
-
-<template name="images">
-    <div id="images">
-        {{#each images}}
-            {{>photoTile}}
-        {{/each}}
-    </div>
-</template>
-
-
-<template name="photoTile">
-    <div class="photo_tile">
-        <div class="col-md-4">
-        <div>
-            {{#if url store="thumbnail"}}
-            {{! if we have a url to the thumbnail store we will display the image}}
-                <img src="{{url store="thumbnail"}}" >
-            {{else}}
-            {{! Since we are do not have a url lets show a placeholder image}}
-                <img src="/images/loading.gif">
-                {{#unless isUploaded}}
-                {{! If we haven't fully uploaded the file yet show the progress}}
-                    <p class="uploadProgress">uploading..{{uploadProgress}}%</p>
-                {{else}}
-                {{!
-                Since we have a fully uploaded file but the store hasn't finished
-                processing yet, we will display a processing message.
-                }}
-                    <p class="uploadProgress">processing..</p>
-                {{/unless}}
-            {{/if}}
-        </div>
-        </div>
-    </div>
 </template>

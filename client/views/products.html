@@ -1,0 +1,38 @@
+<template name="productsPage">
+    <h2>You are on the products screen.</h2>
+
+    {{> productList}}
+</template>
+
+<template name="productList">
+    <p>Product list</p>
+    {{#each products}}
+        {{> product}}
+    {{/each}}
+</template>
+
+<template name="product">
+    <div class="col-xs-6 col-sm-3">
+        <div class="productTile">
+            <div class="productImageContainer">
+                <img class="productImage" src="/images/pic1.jpg">
+            </div>
+            <div class="productDetail">
+                <div class="productTitle">
+                    {{name}}
+                </div>
+                <div class="productDesc">
+                    {{description}}
+                </div>
+                <div class="productPrice">
+                    <p>£{{price}}</p>
+                </div>
+            </div>
+            <div class="productButtons">
+                <div class="visualiseButton">
+                </div>
+                <a href="{{link}}">Retailer</a>
+            </div>
+        </div>
+    </div>
+</template>

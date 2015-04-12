@@ -3,5 +3,9 @@ Router.route('/', function () {
 });
 
 Router.route('/gallery', function () {
-    this.render('gallery');
+    this.render('galleryPage');
+});
+
+Router.route('/products', function () {
+    this.render('productsPage');
 });

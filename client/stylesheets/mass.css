@@ -1,13 +1,43 @@
+.productTile {
+    max-width: 20%
+    margin: 10px 10px 10px 10px
+}
+
+.productImage {
+    width:auto;
+    max-width:100%;
+    height:auto;
+}
+
+.productDetail {
+
+}
+
+.productTitle {
+    font-weight: bold;
+}
+
+.productDesc {
+
+}
+
+.productPrice {
+    text-align: right;
+}
+
+.productButtons {
+
+}
+
+
+.navbar .brand {
+    max-width:45px;
+    margin-top: -7px;
+    margin-bottom: 10px;
+}
+
 .detectorCanvas {
-    background: #CCC;
-    display: block;
-    position: absolute;
-    top: 0;
-    left: 0;
-    right: 0;
-    bottom: 0;
-    width: 100%;
-    height: 100%;
+    display: none;
 }
 
 .logo {
@@ -16,6 +46,7 @@
 }
 
 .photo_tile img {
+   padding: 5px 5px 5px 5px;
     width: 100%;
 }
 
@@ -25,4 +56,15 @@
     left: 5px;
     right: 5px;
     text-align: center;
+}
+
+.viewport {
+    max-width: 100%;
+    height: auto;
+    background-color: aqua;
+}
+
+.viewportCanvas {
+    max-width: 100%;
+    height: auto;
 }

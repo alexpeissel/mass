@@ -10,8 +10,8 @@ insecure
 cfs:standard-packages
 cfs:gridfs
 cfs:graphicsmagick
-accounts-ui
 accounts-password
 iron:router
 twbs:bootstrap
 mizzao:bootboxjs
+accounts-ui-bootstrap-3
