@@ -1,6 +1,9 @@
 .productTile {
-    max-width: 20%
-    margin: 10px 10px 10px 10px
+    padding: 5px;
+    margin: 10px 2px 30px 2px;
+    background-color:#f9f9f9;
+    border: 2px solid #f9f9f9;
+
 }
 
 .productImage {
@@ -10,11 +13,12 @@
 }
 
 .productDetail {
-
+    padding: 5px 5px 5px 0px;
 }
 
 .productTitle {
     font-weight: bold;
+    padding: 5px 5px 5px 0px;
 }
 
 .productDesc {
@@ -22,13 +26,14 @@
 }
 
 .productPrice {
+    font-weight: bold;
     text-align: right;
+    padding: 5px 5px 5px 0px;
 }
 
 .productButtons {
 
 }
-
 
 .navbar .brand {
     max-width:45px;
@@ -46,7 +51,7 @@
 }
 
 .photo_tile img {
-   padding: 5px 5px 5px 5px;
+    padding: 5px 5px 5px 5px;
     width: 100%;
 }
 

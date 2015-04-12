@@ -15,3 +15,4 @@ iron:router
 twbs:bootstrap
 mizzao:bootboxjs
 accounts-ui-bootstrap-3
+cfs:ui

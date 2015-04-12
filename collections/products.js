@@ -8,7 +8,8 @@ function addInitalData() {
             console.log(i + ' doc indexed');
             Products.insert({
                 name: "Product #" + i,
-                description: "descriptive text goes here for product #" + i,
+                createdAt: new Date().getTime(),
+                description: "This text is now going to super long.  Descriptive text goes here for product #" + i,
                 link: "http://www.google.com",
                 price: "10.99",
                 image: null,
