@@ -1,16 +1,34 @@
 <template name="productsPage">
 
     {{> productSearch}}
-    {{> productList}}
 </template>
 
 <template name="productSearch">
-
-    <p>Product search</p>
+    <div class="searchBar">
+        <div class="container">
+            <div class="row">
+                <div class="col-sm-6 col-sm-offset-3">
+                    <div id="imaginary_container">
+                        <div class="input-group stylish-input-group">
+                            <input type="text" class="form-control" placeholder="Search..." value="{{productSearchQuery}}">
+                    <span class="input-group-addon">
+                            <span class="glyphicon glyphicon-search"></span>
+                    </span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        {{#if searchResults.count}}
+            {{#each searchResults}}
+                {{> product}}
+            {{/each}}
+        {{/if}}
+    </div>
 </template>
 
 <template name="productList">
-
+    //lists all products - good for debugging
     {{#each products}}
         {{> product}}
     {{/each}}
@@ -25,17 +43,17 @@
             </div>
             <div class="productDetail">
                 <div class="productTitle">
-                    {{name}}
+                    <p>{{name}}</p>
                 </div>
                 <div class="productDesc">
-                    {{description}}
+                    <p>{{description}}</p>
                 </div>
                 <div class="productPrice">
                     <p>£{{price}}</p>
                 </div>
             </div>
             <div class="productButtons">
-                <div class="btn-group btn-group-justified" role="group" aria-label="...">
+                <div class="btn-group btn-group-justified" role="group">
                     <div class="btn-group" role="group">
                         <a href="{{link}}" class="btn btn-info" role="button">
                             <span class="glyphicon glyphicon-shopping-cart"></span>

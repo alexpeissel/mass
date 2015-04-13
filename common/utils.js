@@ -1,3 +1,5 @@
-/**
- * Created by alexpeissel on 13/04/15.
- */
+//http://meteorcapture.com/simple-search-pattern/
+
+RegExp.escape = function(s) {
+    return s.replace(/[-\/\\^$*+?.()|[\]{}]/g, '\\$&');
+};

@@ -1,6 +1,7 @@
 <template name='galleryPage'>
     <h2>You are on the gallery screen.</h2>
     {{> images}}
+    {{> uploader}}
 </template>
 
 <template name="images">
@@ -8,9 +9,9 @@
         {{#each images}}
             {{>photoTile}}
         {{/each}}
+
     </div>
 </template>
-
 
 <template name="photoTile">
     <div class="photo_tile">
@@ -36,4 +37,6 @@
             </div>
         </div>
     </div>
+
 </template>
+
