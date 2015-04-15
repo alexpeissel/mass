@@ -5,9 +5,11 @@ Template.viewport.rendered = function () {
     var angularSpeed = 0.2;
     var lastTime = 0;
 
-    var containerWidth = Math.floor($(".modal-body").width());
-    var containerHeight = Math.floor($(".modal-body").height());
+    var containerWidth = Math.floor($("#viewport").width());
+    var containerHeight = Math.floor($("#viewport").height());
 
+    console.log(containerWidth);
+    console.log(containerHeight);
 
     // this function is executed on each animation frame
     function animate() {
@@ -27,35 +29,16 @@ Template.viewport.rendered = function () {
         });
     }
 
-    function resize(gl) {
-        var canvas = gl.canvas;
-
-        // Lookup the size the browser is displaying the canvas.
-        var displayWidth  = canvas.clientWidth;
-        var displayHeight = canvas.clientHeight;
-
-        // Check if the canvas is not the same size.
-        if (canvas.width  != displayWidth ||
-            canvas.height != displayHeight) {
-
-            // Make the canvas the same size
-            canvas.width  = displayWidth;
-            canvas.height = displayHeight;
-
-            // Set the viewport to match
-            gl.viewport(0, 0, canvas.width, canvas.height);
-        }
-    }
-
     // renderer
     var canvas = document.getElementById("myCanvas");
+    canvas.width = containerWidth;
+    canvas.height = containerHeight;
+
     var renderer = new THREE.WebGLRenderer({canvas: canvas});
     renderer.setSize(containerWidth, containerHeight);
 
-    var gl = getWebGLContext(canvas, undefined, {dontResize: true, noTitle: true});
-
     // camera
-    var camera = new THREE.PerspectiveCamera(45, containerHeight / containerWidth, 1, 1000);
+    var camera = new THREE.PerspectiveCamera(45, canvas.width / canvas.height, 1, 1000);
     camera.position.z = 500;
 
     // scene
