@@ -57,7 +57,8 @@ Template.viewport.rendered = function () {
             mesh.receiveShadow = true;
             mesh.castShadow = true;
 
-            mesh.rotation.x
+            mesh.rotation.x = 10;
+            mesh.position.x = 10;
 
             scene.add(mesh);
         });
@@ -102,6 +103,10 @@ Template.viewport.rendered = function () {
 
         target.width = img.width;
         target.height = img.height;
+    }
+
+    function updateModelPosition() {
+
     }
 
 }

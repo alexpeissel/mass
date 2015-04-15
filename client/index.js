@@ -142,8 +142,8 @@ if (Meteor.isClient) {
             console.log("Registered upload");
             FS.Utility.eachFile(event, function (file) {
                 var newFile = new FS.File(file);
-                file.metadata = {
-                    title: "",
+                newFile.metadata = {
+                    title: "Hello",
                     rotationX: "",
                     rotationY: "",
                     rotationZ: "",
@@ -151,9 +151,9 @@ if (Meteor.isClient) {
                     positionY: "",
                     positionZ: ""
                 };
-                Images.insert(file, function (err, fileObj) {
+                Images.insert(newFile, function (err, fileObj) {
                     // Inserted new doc with ID fileObj._id, and kicked off the data upload using HTTP
-                    console.log("Uploaded file: " + file.name);
+                    console.log("Uploaded file: " + newFile.name);
                 });
             });
         }
