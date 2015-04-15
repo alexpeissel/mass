@@ -5,12 +5,6 @@ Template.viewport.rendered = function () {
     var angularSpeed = 0.2;
     var lastTime = 0;
 
-    var containerWidth = Math.floor($("#viewport").width());
-    var containerHeight = Math.floor($("#viewport").height());
-
-    console.log(containerWidth);
-    console.log(containerHeight);
-
     // this function is executed on each animation frame
     function animate() {
         // update
@@ -31,8 +25,16 @@ Template.viewport.rendered = function () {
 
     // renderer
     var canvas = document.getElementById("myCanvas");
+
+    var containerWidth = Math.floor($("#viewport").width());
+    var containerHeight = Math.floor($("#viewport").height());
+
+    console.log(containerWidth);
+    console.log(containerHeight);
+
     canvas.width = containerWidth;
     canvas.height = containerHeight;
+
 
     var renderer = new THREE.WebGLRenderer({canvas: canvas});
     renderer.setSize(containerWidth, containerHeight);
