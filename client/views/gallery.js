@@ -1,57 +1,107 @@
+//http://stackoverflow.com/questions/19865537/three-js-set-background-image
+//http://blog.romanliutikov.com/post/58690562825/external-models-in-three-js
+//http://www.html5canvastutorials.com/three/html5-canvas-webgl-rotating-cube/
+
 Template.viewport.rendered = function () {
-    console.log("Starting render");
+    console.log("Starting webGL");
+
     // Set up the scene, camera, and renderer as global variables.
-    // revolutions per second
-    var angularSpeed = 0.2;
-    var lastTime = 0;
+    var renderer, canvas, camera, scene, backgroundCamera, backgroundScene, mesh;
+
+    //Load image (requires DB integration - pass in imageID as parameter and load?)
+    var image = new Image();
+    image.src = "/images/pic1.jpg";
+
+    //Set up canvas
+    canvas = document.getElementById("myCanvas");
+    initCanvas(canvas, image);
+
+    //Set up renderer and point it at canvas
+    renderer = new THREE.WebGLRenderer({canvas: canvas});
+    renderer.setSize(canvas.width, canvas.height);
+    renderer.autoClear = false;
+
+    //Set up cameras
+    camera = new THREE.PerspectiveCamera(45, canvas.width / canvas.height, 1, 1000);
+    camera.position.z = 500;
+    backgroundCamera = new THREE.Camera();
+
+    //Set up foreground scene (the JSON model) and background scene (the image)
+    scene = new THREE.Scene();
+    backgroundScene = new THREE.Scene();
+
+    //Uncomment for hot cube action
+    //var cube = new THREE.Mesh(new THREE.CubeGeometry(200, 200, 200), new THREE.MeshNormalMaterial());
+    //cube.overdraw = true;
+    //scene.add(cube);
+
+    //Add model and background
+    loadModel(scene, '/models/car.js');
+    createBackground(backgroundScene, '/images/pic1.jpg', backgroundCamera);
+
+    animate();
+
+    function loadModel(scene, url) {
+        //Instantiate a loader
+        loader = new THREE.JSONLoader();
+        loader.load(url, function (geometry) {
+            //var material = new THREE.MeshLambertMaterial({
+            //    map: THREE.ImageUtils.loadTexture('/models/gtare.jpg')
+            //});
+
+            mesh = new THREE.Mesh(
+                geometry
+                //material
+            );
+
+            mesh.receiveShadow = true;
+            mesh.castShadow = true;
+
+            mesh.rotation.x
+
+            scene.add(mesh);
+        });
+    }
+
+    function createBackground(scene, url, camera) {
+        // Load the background texture
+        var texture = THREE.ImageUtils.loadTexture(url);
+        var backgroundMesh = new THREE.Mesh(
+            new THREE.PlaneGeometry(2, 2, 0),
+            new THREE.MeshBasicMaterial({
+                map: texture
+            }));
+
+        backgroundMesh.material.depthTest = false;
+        backgroundMesh.material.depthWrite = false;
+
+        // Create your background scene
+
+       scene.add(camera);
+        scene.add(backgroundMesh);
+    }
 
     // this function is executed on each animation frame
     function animate() {
-        // update
-        var time = (new Date()).getTime();
-        var timeDiff = time - lastTime;
-        var angleChange = angularSpeed * timeDiff * 2 * Math.PI / 1000;
-        cube.rotation.y += angleChange;
-        lastTime = time;
 
         // render
+        renderer.clear();
+        renderer.render(backgroundScene, backgroundCamera);
         renderer.render(scene, camera);
 
         // request new frame
         requestAnimationFrame(function () {
             animate();
+
         });
     }
 
-    // renderer
-    var canvas = document.getElementById("myCanvas");
+    function initCanvas(target, img) {
+        console.log(img.height);
+        console.log(img.width);
 
-    var containerWidth = Math.floor($("#viewport").width());
-    var containerHeight = Math.floor($("#viewport").height());
-
-    console.log(containerWidth);
-    console.log(containerHeight);
-
-    canvas.width = containerWidth;
-    canvas.height = containerHeight;
-
-
-    var renderer = new THREE.WebGLRenderer({canvas: canvas});
-    renderer.setSize(containerWidth, containerHeight);
-
-    // camera
-    var camera = new THREE.PerspectiveCamera(45, canvas.width / canvas.height, 1, 1000);
-    camera.position.z = 500;
-
-    // scene
-    var scene = new THREE.Scene();
-
-    // cube
-    var cube = new THREE.Mesh(new THREE.CubeGeometry(200, 200, 200), new THREE.MeshNormalMaterial());
-    cube.overdraw = true;
-    scene.add(cube);
-
-    // start animation
-    animate();
+        target.width = img.width;
+        target.height = img.height;
+    }
 
 }
