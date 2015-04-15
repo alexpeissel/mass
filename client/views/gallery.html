@@ -1,16 +1,17 @@
-<template name='galleryPage'>
+<template name="galleryPage">
     <h2>You are on the gallery screen.</h2>
     {{> images}}
     {{> uploader}}
+
 </template>
 
 <template name="images">
     <div id="images">
         {{#each images}}
-            {{>photoTile}}
+            {{> photoTile}}
         {{/each}}
-
     </div>
+
 </template>
 
 <template name="photoTile">
@@ -36,7 +37,15 @@
                 {{/if}}
             </div>
         </div>
+
     </div>
 
 </template>
 
+<template name="viewport">
+    <p>3d view</p>
+    <div id="viewport" class="viewport">
+        <canvas id="myCanvas" width="100%" height="600" style="background-color: #aaaaaa"></canvas>
+    </div>
+
+</template>

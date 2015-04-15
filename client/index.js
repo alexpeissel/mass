@@ -25,7 +25,7 @@ if (Meteor.isClient) {
             console.log(this._id);
             bootbox.dialog({
                 title: 'View image',
-                message: renderTemplate(Template.detector),
+                message: renderTemplate(Template.viewport),
                 buttons: {
                     close: {
                         label: "Close",

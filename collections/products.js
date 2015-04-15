@@ -6,8 +6,10 @@ function addInitalData() {
 
         for (var i = 0; i < 10; i++) {
             console.log(i + ' doc indexed');
+            brands = ["Sony", "Panasonic", "Apple", "Philips"];
+            models = ["10000", "a-tron", "Atomic", "Laserdisk", "Watch", "Blast", "Device"]
             Products.insert({
-                name: "Product #" + i,
+                name: randElement(brands) + " " + randElement(models),
                 createdAt: new Date().getTime(),
                 description: "This text is now going to be very long.  Descriptive text goes here for product #" + i,
                 link: "http://www.google.com",
@@ -21,11 +23,15 @@ function addInitalData() {
     }
 }
 
+function randElement(arr){
+    return arr[Math.floor(Math.random() * brands.length)];
+}
+
 Products.search = function(query) {
     return Products.find({
         name: { $regex: RegExp.escape(query), $options: 'i' }
     }, {
-        limit: 20
+        limit: 50
     });
 };
 
