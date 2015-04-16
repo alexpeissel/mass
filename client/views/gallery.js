@@ -30,35 +30,48 @@ Template.viewport.rendered = function () {
     scene = new THREE.Scene();
     backgroundScene = new THREE.Scene();
 
-    //Uncomment for hot cube action
-    //var cube = new THREE.Mesh(new THREE.CubeGeometry(200, 200, 200), new THREE.MeshNormalMaterial());
-    //cube.overdraw = true;
-    //scene.add(cube);
-
     //Add model and background
-    loadModel(scene, '/models/car.js');
+    loadModel(scene, '/models/car.js', false);
     createBackground(backgroundScene, '/images/pic1.jpg', backgroundCamera);
+
+    //updateModelPosition(mesh);
 
     animate();
 
-    function loadModel(scene, url) {
+    function loadModel(scene, url, boxed) {
         //Instantiate a loader
         loader = new THREE.JSONLoader();
-        loader.load(url, function (geometry) {
-            //var material = new THREE.MeshLambertMaterial({
-            //    map: THREE.ImageUtils.loadTexture('/models/gtare.jpg')
-            //});
+        loader.load(url, function (geometry, material) {
+            material = new THREE.MeshBasicMaterial(
+                {
+                    map: THREE.ImageUtils.loadTexture("/models/gtare.jpg"),
+                    depthTest: false,
+                    depthWrite: false
+                }),
 
             mesh = new THREE.Mesh(
-                geometry
-                //material
+                geometry,
+                material
             );
 
             mesh.receiveShadow = true;
             mesh.castShadow = true;
 
-            mesh.rotation.x = 10;
-            mesh.position.x = 10;
+            if (boxed){
+                //hot cube action
+                console.log("Adding guide box");
+                var cube = new THREE.Mesh(new THREE.CubeGeometry(200, 200, 200), new THREE.MeshBasicMaterial({
+                        wireframe: true,
+                        color: 'blue'
+                    })
+                );
+                cube.overdraw = true;
+                scene.add(cube);
+                updateModelPosition(cube);
+
+            }
+
+            updateModelPosition(mesh);
 
             scene.add(mesh);
         });
@@ -77,8 +90,7 @@ Template.viewport.rendered = function () {
         backgroundMesh.material.depthWrite = false;
 
         // Create your background scene
-
-       scene.add(camera);
+        scene.add(camera);
         scene.add(backgroundMesh);
     }
 
@@ -105,8 +117,13 @@ Template.viewport.rendered = function () {
         target.height = img.height;
     }
 
-    function updateModelPosition() {
-
+    function updateModelPosition(mesh) {
+        mesh.rotation.x = -0.186;
+        mesh.rotation.y = -0.672;
+        mesh.rotation.z = -3.01;
+        mesh.rotation.x = 4.27;
+        mesh.rotation.y = -4.91;
+        mesh.rotation.z = -263.32;
     }
 
 }

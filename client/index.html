@@ -5,7 +5,6 @@
 
 <body>
     {{> header}}
-    {{> home}}
 
 </body>
 
@@ -21,7 +20,7 @@
                     <span class="icon-bar"></span>
                 </button>
                 <a class="navbar-brand productImage" href="/">
-                    <img alt="mass logo" src="/images/placeholder.png">
+                    <img style="width: 20px;" alt="mass logo" src="/images/placeholder.png">
                 </a>
             </div>
 
@@ -48,6 +47,9 @@
 
 <template name="uploader">
     <form name="uploadForm">
-        <input id="fileInput" type="file" multiple="multiple">
+        <label class="uploader">
+            <img src="/images/uploadIcon.png" alt="Uploader button"/>
+            <input id="fileInput" type="file" multiple="multiple">
+        </label>
     </form>
 </template>

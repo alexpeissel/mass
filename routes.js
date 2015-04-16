@@ -1,3 +1,7 @@
+/*
+    Declare all URL patterns and their target templates
+ */
+
 Router.route('/', function () {
     this.render('home');
 });

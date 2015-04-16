@@ -41,6 +41,10 @@
     margin-bottom: 10px;
 }
 
+.container {
+    margin-top: 50px;
+}
+
 .detectorCanvas {
     display: none;
 }
@@ -69,10 +73,28 @@
 }
 
 .viewportCanvas {
-
     border: solid;
 }
 
 .searchBar {
     padding: 30px 0px 30px 0px;
+}
+
+.uploader {
+    position: relative;
+    overflow: hidden;
+    float: left;
+    clear: left;
+
+}
+
+.uploader input[type="file"] {
+    display: block;
+    position: absolute;
+    top: 0;
+    right: 0;
+    opacity: 0;
+    font-size: 100px;
+    filter: alpha(opacity=0);
+    cursor: pointer;
 }

@@ -1,7 +1,9 @@
 <template name="galleryPage">
-    <h2>You are on the gallery screen.</h2>
-    {{> images}}
-    {{> uploader}}
+    <div class="container">
+        {{> images}}
+        {{> uploader}}
+
+    </div>
 
 </template>
 
@@ -10,6 +12,7 @@
         {{#each images}}
             {{> photoTile}}
         {{/each}}
+
     </div>
 
 </template>
@@ -23,10 +26,10 @@
                     <img src="{{url store="thumbnail"}}">
                 {{else}}
                 {{! Since we are do not have a url lets show a placeholder image}}
-                    <img src="/images/loading.gif">
+                    <img src="/images/hex.gif">
                     {{#unless isUploaded}}
                     {{! If we haven't fully uploaded the file yet show the progress}}
-                        <p class="uploadProgress">uploading..{{uploadProgress}}%</p>
+                        <p class="uploadProgress">uploading...</p>
                     {{else}}
                     {{!
                     Since we have a fully uploaded file but the store hasn't finished
