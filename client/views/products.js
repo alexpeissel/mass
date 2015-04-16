@@ -47,7 +47,7 @@ Tracker.autorun(function() {
 });
 
 Template.productList.rendered = function(){
-    return Products.find();
+    Session.set('productSearchQuery', event.target.value);
 }
 
 Template.productSearch.events({
