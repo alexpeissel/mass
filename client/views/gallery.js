@@ -35,7 +35,7 @@ Template.photoTile.events({
                 }
             }
         });
-        Blaze.render(Template.detector, $("#detectorNode")[0]);
+
     }
 
 });

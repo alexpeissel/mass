@@ -15,33 +15,34 @@ Template.viewport.rendered = function () {
     console.log("Using " + imageUrl);
     image.src = imageUrl;
 
-    //}
+    image.addEventListener("load", function () {
 
-    //Set up canvas
-    canvas = document.getElementById("viewportCanvas");
-    initCanvas(canvas, image);
+        //Set up canvas
+        canvas = document.getElementById("viewportCanvas");
+        initCanvas(canvas, image);
 
-    //Set up renderer and point it at canvas
-    renderer = new THREE.WebGLRenderer({canvas: canvas});
-    renderer.setSize(canvas.width, canvas.height);
-    renderer.autoClear = false;
+        //Set up renderer and point it at canvas
+        renderer = new THREE.WebGLRenderer({canvas: canvas, antialias: true});
+        renderer.setSize(canvas.width, canvas.height);
+        renderer.autoClear = false;
 
-    //Set up cameras
-    camera = new THREE.PerspectiveCamera(45, canvas.width / canvas.height, 1, 1000);
-    camera.position.z = 500;
-    backgroundCamera = new THREE.Camera();
+        //Set up cameras
+        camera = new THREE.PerspectiveCamera(45, canvas.width / canvas.height, 1, 1000);
+        camera.position.z = 500;
+        backgroundCamera = new THREE.Camera();
 
-    //Set up foreground scene (the JSON model) and background scene (the image)
-    scene = new THREE.Scene();
-    backgroundScene = new THREE.Scene();
+        //Set up foreground scene (the JSON model) and background scene (the image)
+        scene = new THREE.Scene();
+        backgroundScene = new THREE.Scene();
 
-    //Add model and background
-    loadModel(scene, '/models/car.js', true);
-    createBackground(backgroundScene, imageUrl, backgroundCamera);
+        //Add model and background
+        loadModel(scene, '/models/car.js', true);
+        createBackground(backgroundScene, imageUrl, backgroundCamera);
 
-    //updateModelPosition(mesh);
+        //updateModelPosition(mesh);
 
-    animate();
+        animate();
+    });
 
     function loadModel(scene, url, boxed) {
         //Instantiate a loader
@@ -62,7 +63,7 @@ Template.viewport.rendered = function () {
             mesh.receiveShadow = true;
             mesh.castShadow = true;
 
-            if (boxed){
+            if (boxed) {
                 //hot cube action
                 console.log("Adding guide box");
                 var cube = new THREE.Mesh(new THREE.CubeGeometry(200, 200, 200), new THREE.MeshBasicMaterial({

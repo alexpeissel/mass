@@ -1,13 +1,12 @@
 <template name="galleryPage">
     <div class="container">
         {{> images}}
-        {{> uploader}}
     </div>
 
 </template>
 
 <template name="images">
-    <div class="container">
+    <div id="derp" class="container">
         <div id="images">
             {{#each images}}
                 {{> photoTile}}

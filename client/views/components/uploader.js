@@ -4,10 +4,10 @@ Template.uploader.events({
 
         var fr = new FileReader;
 
-        fr.onload = function() {
+        fr.onload = function () {
             var img = new Image;
 
-            img.onload = function() {
+            img.onload = function () {
                 detectMarker(img, tempCanvas)
             };
 
@@ -58,7 +58,7 @@ Template.uploader.events({
             context.drawImage(img, 0, 0, canvas.width, canvas.height);
 
             //By wrapping in onload, bug prevented where canvas was not yet ready for access
-            canvas.onload = function(){
+            canvas.onload = function () {
                 console.log("Canvas " + canvas.id + "is now loaded");
                 var imageData = context.getImageData(0, 0, canvas.width, canvas.height);
                 var markers = detector.detect(imageData);

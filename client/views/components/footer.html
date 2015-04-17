@@ -1,5 +1,23 @@
 <template name="footer">
-    <div class="footer">
-
-    </div>
+        <footer class="footer">
+            <div class="dashboard col-xs-6">
+                <div class="dashProduct">
+                    <div class="dashLabel">
+                        Product: {{currentProduct}}
+                    </div>
+                    <div class="dashThumb">
+                    </div>
+                </div>
+                <div class="dashImage col-xs-6 col-sm-4">
+                    <div class="dashLabel">
+                        Image: {{currentImage}}
+                    </div>
+                    <div class="dashThumb">
+                    </div>
+                </div>
+            </div>
+            <div class="upload col-xs-6">
+                {{>uploader}}
+            </div>
+        </footer>
 </template>
