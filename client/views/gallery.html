@@ -2,7 +2,6 @@
     <div class="container">
         {{> images}}
         {{> uploader}}
-
     </div>
 
 </template>
@@ -16,25 +15,21 @@
 
         </div>
     </div>
+
 </template>
 
 <template name="photoTile">
-    <div class="photo_tile">
+    <div class="photo_tile overlay">
         <div class="col-xs-6 col-sm-3">
             <div>
                 <img src="{{this.url store='thumbnail' uploading='/images/hex.gif' storing='/images/hex.gif'}}" alt=""
                      class="thumbnail"/>
+                <div class="after">
+                    Delete {{this.name}}: {{> FS.DeleteButton class="btn btn-danger btn-xs"}}
+                </div>
+
             </div>
         </div>
-    </div>
-
-</template>
-
-<template name="viewport">
-    <p>3d view</p>
-
-    <div id="viewport" class="viewport">
-        <canvas id="myCanvas" style="width: 100%; background-color: #aaaaaa;" width="100" height="100"></canvas>
     </div>
 
 </template>

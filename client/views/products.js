@@ -26,6 +26,7 @@ Template.product.events({
                    callback: function () {
                        var product = $(clickedButton).val();
                        Session.set("currentProduct", Products.findOne({_id: product}, {fields: {name:1}}).name);
+                       console.log(Products.findOne({_id: product}, {fields: {name:1}}).name);
 
                    }
                },

@@ -73,7 +73,7 @@
 }
 
 .viewportCanvas {
-    border: solid;
+    width: 100%;
 }
 
 .searchBar {
@@ -99,9 +99,12 @@
     cursor: pointer;
 }
 
-#triangle-topleft {
-    width: 0;
-    height: 0;
-    border-top: 100px solid red;
-    border-right: 100px solid transparent;
+.footer {
+    position: fixed;
+    height: 100px;
+    bottom: 0;
+    width: 100%;
+    background-color: #F5F5F5;
+
 }
+
