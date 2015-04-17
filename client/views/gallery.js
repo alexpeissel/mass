@@ -31,7 +31,7 @@ Template.viewport.rendered = function () {
     backgroundScene = new THREE.Scene();
 
     //Add model and background
-    loadModel(scene, '/models/car.js', false);
+    loadModel(scene, '/models/car.js', true);
     createBackground(backgroundScene, '/images/pic1.jpg', backgroundCamera);
 
     //updateModelPosition(mesh);
@@ -117,13 +117,57 @@ Template.viewport.rendered = function () {
         target.height = img.height;
     }
 
-    function updateModelPosition(mesh) {
-        mesh.rotation.x = -0.186;
-        mesh.rotation.y = -0.672;
-        mesh.rotation.z = -3.01;
-        mesh.rotation.x = 4.27;
-        mesh.rotation.y = -4.91;
-        mesh.rotation.z = -263.32;
+    function updateModelPosition(object) {
+        object.rotation.x = -0.186;
+        object.rotation.y = -0.672;
+        object.rotation.z = -3.01;
+        object.rotation.x = 4.27;
+        object.rotation.y = -4.91;
+        object.rotation.z = -263.32;
     }
 
-}
+};
+
+Template.photoTile.events({
+    'click': function () {
+        var currentImage = this._id;
+        bootbox.dialog({
+            title: 'View image',
+            message: renderTemplate(Template.viewport),
+            buttons: {
+                close: {
+                    label: "Close",
+                    className: "btn btn-primary",
+                    callback: function () {
+                        //take some actions
+                    }
+                },
+
+                visualise: {
+                    label: "Visualise",
+                    className: "btn btn-primary",
+                    callback: function () {
+                        Session.set("currentImage", Images.findOne({_id: currentImage})._id);
+                    }
+                },
+
+                delete: {
+                    label: "Delete",
+                    className: "btn btn-danger",
+                    callback: function () {
+                        console.log(this._id);
+                        Images.remove(this._id);
+                    }
+                }
+            }
+        });
+        Blaze.render(Template.detector, $("#detectorNode")[0]);
+    }
+});
+
+Template.images.helpers({
+    images: function () {
+        return Images.find();
+    }
+
+});

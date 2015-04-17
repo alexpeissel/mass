@@ -7,7 +7,7 @@ Template.productList.helpers({
 Template.product.events({
    'click .btn': function(e){
        var clickedButton = e.currentTarget;
-       //alert( $(clickedButton).val() );
+       //alert( $ );
        bootbox.dialog({
            title: 'View image',
            message: $(clickedButton).val(),
@@ -24,7 +24,9 @@ Template.product.events({
                    label: "Visualise",
                    className: "btn btn-primary",
                    callback: function () {
-                       //take some actions
+                       var product = $(clickedButton).val();
+                       Session.set("currentProduct", Products.findOne({_id: product}, {fields: {name:1}}).name);
+
                    }
                },
 
@@ -43,12 +45,12 @@ Template.product.events({
 
 Tracker.autorun(function() {
     if (Session.get('productSearchQuery'))
-        Meteor.subscribe('prductSearch', Session.get('productSearchQuery'));
+        Meteor.subscribe('productSearch', Session.get('productSearchQuery'));
 });
 
-Template.productList.rendered = function(){
-    Session.set('productSearchQuery', event.target.value);
-}
+//Template.productList.rendered = function(){
+//    Session.set('productSearchQuery', event.target.value);
+//}
 
 Template.productSearch.events({
     'keyup [type=text]': function(event, template) {

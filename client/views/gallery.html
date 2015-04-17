@@ -8,45 +8,31 @@
 </template>
 
 <template name="images">
-    <div id="images">
-        {{#each images}}
-            {{> photoTile}}
-        {{/each}}
+    <div class="container">
+        <div id="images">
+            {{#each images}}
+                {{> photoTile}}
+            {{/each}}
 
+        </div>
     </div>
-
 </template>
 
 <template name="photoTile">
     <div class="photo_tile">
         <div class="col-xs-6 col-sm-3">
             <div>
-                {{#if url store="thumbnail"}}
-                {{! if we have a url to the thumbnail store we will display the image}}
-                    <img src="{{url store="thumbnail"}}">
-                {{else}}
-                {{! Since we are do not have a url lets show a placeholder image}}
-                    <img src="/images/hex.gif">
-                    {{#unless isUploaded}}
-                    {{! If we haven't fully uploaded the file yet show the progress}}
-                        <p class="uploadProgress">uploading...</p>
-                    {{else}}
-                    {{!
-                    Since we have a fully uploaded file but the store hasn't finished
-                    processing yet, we will display a processing message.
-                    }}
-                        <p class="uploadProgress">processing..</p>
-                    {{/unless}}
-                {{/if}}
+                <img src="{{this.url store='thumbnail' uploading='/images/hex.gif' storing='/images/hex.gif'}}" alt=""
+                     class="thumbnail"/>
             </div>
         </div>
-
     </div>
 
 </template>
 
 <template name="viewport">
     <p>3d view</p>
+
     <div id="viewport" class="viewport">
         <canvas id="myCanvas" style="width: 100%; background-color: #aaaaaa;" width="100" height="100"></canvas>
     </div>
