@@ -7,7 +7,15 @@ Template.uploader.events({
 
         var fileList = $('input[type="file"]').get(0).files;
 
-        var validImages = [];
+        function upload(file, metadata){
+            var newFile = new FS.File(file);
+            newFile.metadata = metadata;
+
+            // Inserted new doc with ID fileObj._id, and kicked off the data upload using HTTP
+            Images.insert(newFile, function (err, fileObj) {
+                console.log("Uploaded file");
+            });
+        }
 
         function setupReader(file) {
             var reader = new FileReader();
@@ -21,18 +29,18 @@ Template.uploader.events({
                 img.onload = function () {
                     console.log("Image loaded with width: " + img.width + " and height: " + img.height);
                     scannedImage = detectMarker(img, tempCanvas);
-                    validImages.push(scannedImage);
+
+                    upload(file, scannedImage);
+
                 };
                 img.src = imageData;
 
-            }
+            };
             reader.readAsDataURL(file);
         }
 
         for (var i = 0; i < fileList.length; i++) {
             setupReader(fileList[i]);
-
-            console.log(validImages);
         }
 
         function detectMarker(img, canvas) {
@@ -47,12 +55,17 @@ Template.uploader.events({
             var modelSize = 35.0; //millimeters
 
             var validImage = {
-                rotationX: null,
-                rotationY: null,
-                rotationZ: null,
-                positionX: null,
-                positionY: null,
-                positionZ: null
+                rotation: {
+                    x: null,
+                    y: null,
+                    z: null
+                },
+
+                position: {
+                    x: null,
+                    y: null,
+                    z: null
+                }
             };
 
             console.log("Initilizing detectors");
@@ -85,42 +98,33 @@ Template.uploader.events({
                     updateObject(validImage, pose.bestRotation, pose.bestTranslation, pose.bestError);
 
                 } else {
-                    console.log("No markers detected");
+                    alert("No markers detected in image");
                 }
 
             }
 
             function updateObject(object, rotation, translation, error) {
-                var yaw = -Math.atan2(rotation[0][2], rotation[2][2]);
-                var pitch = -Math.asin(-rotation[1][2]);
-                var roll = Math.atan2(rotation[1][0], rotation[1][1]);
-                object.rotationX = -Math.asin(-rotation[1][2]);
-                object.rotationY = -Math.atan2(rotation[0][2], rotation[2][2]);
-                object.rotationZ = Math.atan2(rotation[1][0], rotation[1][1]);
+                //var yaw = -Math.atan2(rotation[0][2], rotation[2][2]);
+                //var pitch = -Math.asin(-rotation[1][2]);
+                //var roll = Math.atan2(rotation[1][0], rotation[1][1]);
+                object.rotation.x = -Math.asin(-rotation[1][2]);
+                object.rotation.y = -Math.atan2(rotation[0][2], rotation[2][2]);
+                object.rotation.z = Math.atan2(rotation[1][0], rotation[1][1]);
 
-                object.positionX = translation[0];
-                object.positionY = translation[1];
-                object.positionZ = -translation[2];
+                object.position.x = translation[0];
+                object.position.y = translation[1];
+                object.position.z = -translation[2];
 
-                console.log(object.rotationX);
-                console.log(object.rotationY);
-                console.log(object.rotationZ);
-                console.log(object.positionX);
-                console.log(object.positionY);
-                console.log(object.positionZ);
+                console.log(object.rotation.x);
+                console.log(object.rotation.y);
+                console.log(object.rotation.z);
+                console.log(object.position.x);
+                console.log(object.position.y);
+                console.log(object.position.z);
             }
 
             return validImage;
         }
 
-        FS.Utility.eachFile(event, function (file) {
-            var newFile = new FS.File(file);
-
-            newFile.metadata = {};
-            Images.insert(newFile, function (err, fileObj) {
-                // Inserted new doc with ID fileObj._id, and kicked off the data upload using HTTP
-                console.log("Uploaded file");
-            });
-        });
     }
 });

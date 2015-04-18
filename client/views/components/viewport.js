@@ -12,7 +12,10 @@ Template.viewport.rendered = function () {
     //} else {
 
     var imageUrl = Images.findOne({_id: Session.get("currentImage")}).url();
+    var position = Images.findOne({_id: Session.get("currentImage")}).metadata;
+
     console.log("Using " + imageUrl);
+    console.log("Found positions at " + position);
     image.src = imageUrl;
 
     image.addEventListener("load", function () {
@@ -125,12 +128,12 @@ Template.viewport.rendered = function () {
     }
 
     function updateModelPosition(object) {
-        object.rotation.x = -0.186;
-        object.rotation.y = -0.672;
-        object.rotation.z = -3.01;
-        object.rotation.x = 4.27;
-        object.rotation.y = -4.91;
-        object.rotation.z = -263.32;
+        object.rotation.x = position.rotation.x;
+        object.rotation.y = position.rotation.y;
+        object.rotation.z = position.rotation.z;
+        object.position.x = position.position.x;
+        object.position.y = position.position.y;
+        object.position.z = position.position.z;
     }
 
 };
