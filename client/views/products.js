@@ -49,9 +49,9 @@ Tracker.autorun(function() {
         Meteor.subscribe('productSearch', Session.get('productSearchQuery'));
 });
 
-//Template.productList.rendered = function(){
-//    Session.set('productSearchQuery', event.target.value);
-//}
+Template.productSearch.rendered = function(){
+    Session.set('productSearchQuery', "");
+}
 
 Template.productSearch.events({
     'keyup [type=text]': function(event, template) {

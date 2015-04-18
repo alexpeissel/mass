@@ -2,37 +2,43 @@ Template.uploader.events({
     'change #fileInput': function (event, template) {
         console.log("Starting upload");
 
-        var fr = new FileReader;
+        //set up detector canvas
+        var tempCanvas = document.getElementById("detectorCanvas");
 
-        fr.onload = function () {
-            var img = new Image;
+        var fileList = $('input[type="file"]').get(0).files;
 
-            img.onload = function () {
-                detectMarker(img, tempCanvas)
-            };
+        var validImages = [];
 
-            img.src = fr.result;
-        };
+        function setupReader(file) {
+            var reader = new FileReader();
+            reader.onload = function (e) {
+                console.log("File: " + file.name + " size: " + (file.size / 1024));
 
-        //fr.readAsDataURL(this.files[0]);
+                // get file content
+                var imageData = e.target.result;
 
+                var img = new Image;
+                img.onload = function () {
+                    console.log("Image loaded with width: " + img.width + " and height: " + img.height);
+                    scannedImage = detectMarker(img, tempCanvas);
+                    validImages.push(scannedImage);
+                };
+                img.src = imageData;
 
-        var image = new Image();
-        image.src = "/images/pic2.jpg";
-        console.log(image.width + " " + image.height);
+            }
+            reader.readAsDataURL(file);
+        }
 
-        var tempCanvas = document.createElement("canvas");
-        tempCanvas.id = "tempCanvas";
-        tempCanvas.style.visibility = "hidden";
-        tempCanvas.width = 100;
-        tempCanvas.height = 100;
+        for (var i = 0; i < fileList.length; i++) {
+            setupReader(fileList[i]);
 
-        detectMarker(image, tempCanvas);
+            console.log(validImages);
+        }
 
         function detectMarker(img, canvas) {
 
             var context = canvas.getContext("2d");
-            console.log(img.width + " " + img.height);
+
             canvas.width = img.width;
             canvas.height = img.height;
 
@@ -41,7 +47,6 @@ Template.uploader.events({
             var modelSize = 35.0; //millimeters
 
             var validImage = {
-                imageData: "dataGoesHere",
                 rotationX: null,
                 rotationY: null,
                 rotationZ: null,
@@ -57,13 +62,10 @@ Template.uploader.events({
             console.log("Drawing image " + img.name + " to canvas " + canvas.id);
             context.drawImage(img, 0, 0, canvas.width, canvas.height);
 
-            //By wrapping in onload, bug prevented where canvas was not yet ready for access
-            canvas.onload = function () {
                 console.log("Canvas " + canvas.id + "is now loaded");
                 var imageData = context.getImageData(0, 0, canvas.width, canvas.height);
                 var markers = detector.detect(imageData);
                 updateScenes(markers);
-            };
 
             function updateScenes(markers) {
                 var corners, corner, pose, i;
@@ -111,20 +113,10 @@ Template.uploader.events({
             return validImage;
         }
 
-
-        var validFiles = [];
-
         FS.Utility.eachFile(event, function (file) {
             var newFile = new FS.File(file);
-            newFile.metadata = {
-                title: "Hello",
-                rotationX: "",
-                rotationY: "",
-                rotationZ: "",
-                positionX: "",
-                positionY: "",
-                positionZ: ""
-            };
+
+            newFile.metadata = {};
             Images.insert(newFile, function (err, fileObj) {
                 // Inserted new doc with ID fileObj._id, and kicked off the data upload using HTTP
                 console.log("Uploaded file");

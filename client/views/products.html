@@ -1,29 +1,36 @@
 <template name="productsPage">
-
     {{> productSearch}}
+
 </template>
 
 <template name="productSearch">
-    <div class="searchBar">
-        <div class="container">
-            <div class="row">
-                <div class="col-sm-6 col-sm-offset-3">
-                    <div id="imaginary_container">
-                        <div class="input-group stylish-input-group">
-                            <input type="text" class="form-control" placeholder="Search..." value="{{productSearchQuery}}">
+    <div class="section">
+        <div class="searchBar">
+            <div class="container">
+                <div class="row">
+                    <div class="col-sm-6 col-sm-offset-3">
+                        <div id="imaginary_container">
+                            <div class="input-group stylish-input-group">
+                                <input type="text" class="form-control" placeholder="Search..."
+                                       value="{{productSearchQuery}}">
                     <span class="input-group-addon">
                             <span class="glyphicon glyphicon-search"></span>
                     </span>
+                            </div>
                         </div>
                     </div>
                 </div>
             </div>
+            {{#if searchResults.count}}
+                {{#each searchResults}}
+                    {{> product}}
+                {{/each}}
+            {{else}}
+                <div class="emptySearch">
+                    <h3>No products found.</h3>
+                </div>
+            {{/if}}
         </div>
-        {{#if searchResults.count}}
-            {{#each searchResults}}
-                {{> product}}
-            {{/each}}
-        {{/if}}
     </div>
 </template>
 
@@ -60,9 +67,6 @@
                         </a>
                     </div>
                     <div class="btn-group" role="group">
-                        <!--<a href="#" class="btn btn-info" role="button">-->
-                            <!--<span class="glyphicon glyphicon-eye-open"></span>-->
-                        <!--</a>-->
                         <button type="button" class="btn btn-info" value={{this._id}}>
                             <span class="glyphicon glyphicon-eye-open"></span>
                         </button>

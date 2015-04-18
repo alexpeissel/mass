@@ -13,8 +13,14 @@ var thumbnailStore = new FS.Store.GridFS("thumbnail", {
         /* Use graphicsmagick to create a 300x300 square thumbnail at 100% quality,
          * orient according to EXIF data if necessary and then save by piping to the
          * provided writeStream */
-        gm(readStream, fileObj.name).resize(300,300,"^")
-            .gravity('Center').crop(300, 300).quality(100).autoOrient().stream().pipe(writeStream);
+        gm(readStream, fileObj.name)
+            .resize(300,300,"^")
+            .gravity('Center')
+            .crop(300, 300)
+            .quality(100)
+            .autoOrient()
+            .stream()
+            .pipe(writeStream);
     }
 });
 
