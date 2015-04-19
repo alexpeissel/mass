@@ -43,6 +43,16 @@ Template.photoTile.events({
 Template.images.helpers({
     images: function () {
         return Images.find();
-    }
+    },
+
+    shortName: function (name) {
+        var maxLength = 12;
+        if (name.length > maxLength) {
+            return name.substring(0, maxLength) + "...";
+        } else {
+            return name;
+        }
+
+}
 
 });

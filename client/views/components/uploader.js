@@ -27,11 +27,17 @@ Template.uploader.events({
 
                 var img = new Image;
                 img.onload = function () {
-                    console.log("Image loaded with width: " + img.width + " and height: " + img.height);
-                    scannedImage = detectMarker(img, tempCanvas);
+                    Session.set("isUploading", true);
+                    try {
+                        console.log("Image loaded with width: " + img.width + " and height: " + img.height);
+                        scannedImage = detectMarker(img, tempCanvas);
 
-                    upload(file, scannedImage);
-
+                        upload(file, scannedImage);
+                    } catch (error){
+                        Session.set("isUploading", false);
+                        alert(error);
+                    }
+                    Session.set("isUploading", false);
                 };
                 img.src = imageData;
 
@@ -98,7 +104,7 @@ Template.uploader.events({
                     updateObject(validImage, pose.bestRotation, pose.bestTranslation, pose.bestError);
 
                 } else {
-                    alert("No markers detected in image");
+                    console.log("No markers detected in image");
                 }
 
             }

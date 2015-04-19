@@ -18,6 +18,9 @@
                 </div>
             </div>
             <div class="upload col-xs-6">
+                {{#if status}}
+                    <p>Uploading</p>
+                {{/if}}
                 {{> uploader}}
             </div>
         </div>

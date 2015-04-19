@@ -1,3 +1,9 @@
+body {
+    background-image: url("/images/triangle.png");
+    background-size: cover;
+    background-repeat: repeat-y;
+}
+
 .productTile {
     padding: 5px;
     margin: 10px 2px 30px 2px;

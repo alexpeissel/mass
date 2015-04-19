@@ -7,6 +7,10 @@ if (Meteor.isClient) {
 
         currentImage: function () {
             return Session.get("currentImage");
+        },
+
+        status: function () {
+            return Session.get("isUploading")
         }
     });
 }

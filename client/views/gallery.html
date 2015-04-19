@@ -24,9 +24,8 @@
                 <img src="{{this.url store='thumbnail' uploading='/images/hex.gif' storing='/images/hex.gif'}}" alt=""
                      class="thumbnail"/>
                 <div class="after">
-                    Delete {{this.name}}: {{> FS.DeleteButton class="btn btn-danger btn-xs"}}
+                    Delete {{this.name}}: {{#FS.DeleteButton class="btn btn-danger btn-xs"}}Delete Me{{/FS.DeleteButton}}
                 </div>
-
             </div>
         </div>
     </div>
