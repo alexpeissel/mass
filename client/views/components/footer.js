@@ -10,7 +10,13 @@ if (Meteor.isClient) {
         },
 
         status: function () {
+            if (Session.get("isUploading")){
+                console.log("is uploading")
+            } else {
+                console.log("not uploading");
+            }
             return Session.get("isUploading")
+
         }
     });
 }

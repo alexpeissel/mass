@@ -3,6 +3,8 @@ FS.HTTP.setHeadersForGet([
     ['Cache-Control', 'public, max-age=31536000']
 ]);
 
+FS.debug = true;
+
 //Create the master store
 var masterStore = new FS.Store.GridFS("master");
 

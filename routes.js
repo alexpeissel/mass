@@ -13,3 +13,7 @@ Router.route('/gallery', function () {
 Router.route('/products', function () {
     this.render('productsPage');
 });
+
+Router.route('/admin', function () {
+    this.render('adminPage');
+});

@@ -7,7 +7,7 @@ Template.uploader.events({
 
         var fileList = $('input[type="file"]').get(0).files;
 
-        function upload(file, metadata){
+        function upload(file, metadata) {
             var newFile = new FS.File(file);
             newFile.metadata = metadata;
 
@@ -27,15 +27,15 @@ Template.uploader.events({
 
                 var img = new Image;
                 img.onload = function () {
-                    Session.set("isUploading", true);
                     try {
+                        Session.set("isUploading", true);
                         console.log("Image loaded with width: " + img.width + " and height: " + img.height);
                         scannedImage = detectMarker(img, tempCanvas);
-
                         upload(file, scannedImage);
-                    } catch (error){
+
+                    } catch (error) {
                         Session.set("isUploading", false);
-                        alert(error);
+                        console.log(error);
                     }
                     Session.set("isUploading", false);
                 };
@@ -81,10 +81,10 @@ Template.uploader.events({
             console.log("Drawing image " + img.name + " to canvas " + canvas.id);
             context.drawImage(img, 0, 0, canvas.width, canvas.height);
 
-                console.log("Canvas " + canvas.id + "is now loaded");
-                var imageData = context.getImageData(0, 0, canvas.width, canvas.height);
-                var markers = detector.detect(imageData);
-                updateScenes(markers);
+            console.log("Canvas " + canvas.id + "is now loaded");
+            var imageData = context.getImageData(0, 0, canvas.width, canvas.height);
+            var markers = detector.detect(imageData);
+            updateScenes(markers);
 
             function updateScenes(markers) {
                 var corners, corner, pose, i;

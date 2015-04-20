@@ -18,10 +18,14 @@
                 </div>
             </div>
             <div class="upload col-xs-6">
+                <span>
                 {{#if status}}
                     <p>Uploading</p>
+                {{else}}
+                    <p>Not uploading</p>
                 {{/if}}
                 {{> uploader}}
+                    </span>
             </div>
         </div>
     </footer>

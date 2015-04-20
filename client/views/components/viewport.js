@@ -11,7 +11,7 @@ Template.viewport.rendered = function () {
     //    alert("No image selected");
     //} else {
 
-    var imageUrl = Images.findOne({_id: Session.get("currentImage")}).url();
+    var imageUrl = Images.findOne({_id: Session.get("currentImage")}).url({store: 'master'});
     var position = Images.findOne({_id: Session.get("currentImage")}).metadata;
 
     console.log("Using " + imageUrl);
@@ -106,6 +106,9 @@ Template.viewport.rendered = function () {
 
     // this function is executed on each animation frame
     function animate() {
+        // responsive resize
+        canvas.style.width = "100%";
+        canvas.style.height = "100%";
 
         // render
         renderer.clear();
@@ -120,11 +123,10 @@ Template.viewport.rendered = function () {
     }
 
     function initCanvas(target, img) {
-        console.log(img.height);
-        console.log(img.width);
-
+        console.log("Setting canvas size to w: " + img.width + " height: " + img.height);
         target.width = img.width;
         target.height = img.height;
+
     }
 
     function updateModelPosition(object) {
