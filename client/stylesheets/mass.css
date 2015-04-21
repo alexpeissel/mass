@@ -9,6 +9,9 @@ body {
     margin: 10px 2px 30px 2px;
     background-color:#f9f9f9;
     border: 2px solid #f9f9f9;
+    min-height: 400px;
+    max-height: 400px
+
 
 }
 
@@ -38,7 +41,6 @@ body {
 }
 
 .productButtons {
-
 }
 
 .navbar .brand {

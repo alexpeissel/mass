@@ -42,7 +42,10 @@ Template.viewport.rendered = function () {
         loadModel(scene, '/models/car.js', true);
         createBackground(backgroundScene, imageUrl, backgroundCamera);
 
-        //updateModelPosition(mesh);
+        // responsive resize
+        canvas.style.width = "100%";
+        canvas.style.height = "100%";
+
 
         animate();
     });
@@ -106,9 +109,6 @@ Template.viewport.rendered = function () {
 
     // this function is executed on each animation frame
     function animate() {
-        // responsive resize
-        canvas.style.width = "100%";
-        canvas.style.height = "100%";
 
         // render
         renderer.clear();
