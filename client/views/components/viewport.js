@@ -4,12 +4,10 @@ Template.viewport.rendered = function () {
     // Set up the scene, camera, and renderer as global variables.
     var renderer, canvas, camera, scene, backgroundCamera, backgroundScene, mesh;
 
+    var fps = 2;
+
     //Load image (requires DB integration - pass in imageID as parameter and load?)
     var image = new Image();
-
-    //if (!Session.get("currentImage")){
-    //    alert("No image selected");
-    //} else {
 
     var imageUrl = Images.findOne({_id: Session.get("currentImage")}).url({store: 'master'});
     var position = Images.findOne({_id: Session.get("currentImage")}).metadata;
@@ -46,6 +44,7 @@ Template.viewport.rendered = function () {
         canvas.style.width = "100%";
         canvas.style.height = "100%";
 
+        Session.set("snapshotted", false);
 
         animate();
     });
@@ -115,11 +114,18 @@ Template.viewport.rendered = function () {
         renderer.render(backgroundScene, backgroundCamera);
         renderer.render(scene, camera);
 
-        // request new frame
-        requestAnimationFrame(function () {
-            animate();
+        if (Session.equals("snapshotted", false)) {
+            Session.set("snapshotted", true);
+            Session.set("imageData", canvas.toDataURL());
+        }
 
-        });
+
+        // request new frame
+        setTimeout(function () {
+            requestAnimationFrame(function () {
+                animate();
+            });
+        }, 1000 / fps);
     }
 
     function initCanvas(target, img) {

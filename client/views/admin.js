@@ -2,69 +2,32 @@ Template.productDashboard.helpers({
     products: function () {
         //where user.type = business + business ID
         return Products.find();
+    },
+
+    activeModel: function (){
+        if (this.model) {
+            return this.model
+        } else {
+            return "Model"
+        }
+
+    },
+
+    activeImage: function (){
+        if (this.image) {
+            return this.image
+        } else {
+            return "Image"
+        }
     }
 });
 
 Template.productDashboard.events({
-    "click .add": function () {
-        bootbox.prompt({
-            title: "Enter a CSV string",
-            value: Object.keys(Products.findOne({})).slice(1).join(':"", '),
-            callback: function (result) {
-                if (result === null){
-                    alert("prompt empty");
-                } else {
-                    try {
-                        var preparedObject = {
-                            name: null,
-                            description: null,
-                            link: null,
-                            price: null,
-                            image: null,
-                            model: null
-                        };
-
-                        var parsedResults = Papa.parse(result);
-
-                        //newprod, this is cool, http://google.com, 22, img, model
-
-                        if (parsedResults.errors.length > 0){
-                            alert("An error occured during import: " + parsedResults.errors);
-                        } else if (parsedResults.data[0].length != _.keys(preparedObject).length) {
-                            alert("Incorrect number of fields in string: " + parsedResults.data[0].length + " instead of " + _.keys(preparedObject).length);
-                        } else {
-                            preparedObject.name = parsedResults.data[0][0];
-                            preparedObject.description = parsedResults.data[0][1];
-                            preparedObject.link = parsedResults.data[0][2];
-                            preparedObject.price = parsedResults.data[0][3];
-                            preparedObject.image = parsedResults.data[0][4];
-                            preparedObject.model = parsedResults.data[0][5];
-
-                            Products.insert(preparedObject);
-                        }
-
-                    } catch (err) {
-                        alert(err);
-                    }
-
-                }
-            }
-        });
-    },
-
     "click .edit": function () {
-        var thisProduct = this._id;
-        var productData = _.values(Products.findOne({_id: thisProduct})).slice(1).join(", ");
-        var test = {
-            a: "b",
-            b: "c",
-            c: "d"
-        };
-        var results = Papa.parse("hello,my,name,is,bob");
-        console.log(results);
+        Session.set("editingProduct", this._id);
 
         bootbox.dialog({
-            title: 'Add data in CSV format' + productData,
+            title: 'Add data in CSV format',
             message: renderTemplate(Template.csvInput),
             buttons: {
                 close: {
@@ -79,7 +42,37 @@ Template.productDashboard.events({
                     label: "Submit",
                     className: "btn btn-primary",
                     callback: function () {
-                        //Products.insert({});
+                        var converted = csvToObject($('.csvInputTextbox').val());
+                        if (Session.get("editingProduct")) {
+                            bootbox.confirm(
+                                "Change product to attributes: " +
+                                "name: \"" + converted.name +
+                                "\", description: \"" + converted.description +
+                                "\", price: \"" + converted.price +
+                                "\", link: \"" + converted.link +
+                                "\", image: \"" + converted.image +
+                                "\", model: \"" + converted.model + "\"?",
+                                function (result) {
+                                    if (result) {
+                                        Products.update({_id: Session.get("editingProduct")}, converted);
+                                    }
+                                });
+
+                        } else {
+                            bootbox.confirm(
+                                "Add product with attributes: " +
+                                "name: \"" + converted.name +
+                                "\", description: \"" + converted.description +
+                                "\", price: \"" + converted.price +
+                                "\", link: \"" + converted.link +
+                                "\", image: \"" + converted.image +
+                                "\", model: \"" + converted.model + "\"?",
+                                function (result) {
+                                    if (result) {
+                                        Products.insert(converted);
+                                    }
+                                });
+                        }
                     }
                 }
             }
@@ -91,7 +84,7 @@ Template.productDashboard.events({
         var thisProduct = this._id;
         var product = Products.findOne({_id: thisProduct}).name;
 
-        bootbox.confirm("Are you sure to want to delete " + product + " ?", function(result) {
+        bootbox.confirm("Are you sure to want to delete " + product + " ?", function (result) {
             if (result) {
                 Products.remove({_id: thisProduct});
             }
@@ -100,13 +93,19 @@ Template.productDashboard.events({
 });
 
 Template.csvInput.helpers({
-   csvPlaceholder: function() {
-       // Slice removes _id field
-       var keys = Object.keys(Products.findOne({})).slice(1);
-       return keys.join(', ');
+    csvPlaceholder: function () {
+        // Slice removes _id field
+        var keys = Object.keys(Products.findOne({})).slice(1);
+        return keys.join(', ');
 
-   }
+    }
 });
+
+Template.csvInput.rendered = function () {
+    var productData = _.values(Products.findOne({_id: Session.get("editingProduct")}, {fields: {'createdAt': 0}})).slice(1).join(",");
+    $('.csvInputTextbox').val(productData);
+    Session.set("editProduct", "");
+};
 
 Template.productImport.events({
     'change .productImporter': function (event, template) {
@@ -118,3 +117,36 @@ Template.productImport.events({
         });
     }
 });
+
+function csvToObject(data) {
+    var parsedData = Papa.parse(data);
+
+    var preparedObject = {
+        name: null,
+        description: null,
+        price: null,
+        link: null,
+        image: null,
+        model: null
+    };
+
+    if (parsedData.errors.length > 0) {
+        alert("An error occured during import: " + parsedData.errors[0].join(','));
+    } else if (parsedData.data[0].length != _.keys(preparedObject).length) {
+        alert(
+            "Incorrect number of fields in string: " +
+            parsedData.data[0].length + " instead of " +
+            _.keys(preparedObject).length
+        );
+    } else {
+        preparedObject.name = parsedData.data[0][0];
+        preparedObject.description = parsedData.data[0][1];
+        preparedObject.price = parsedData.data[0][3];
+        preparedObject.link = parsedData.data[0][2];
+        preparedObject.image = parsedData.data[0][4];
+        preparedObject.model = parsedData.data[0][5];
+    }
+    console.log(preparedObject);
+    return preparedObject;
+}
+

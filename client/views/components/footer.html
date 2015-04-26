@@ -1,31 +1,20 @@
 <template name="footer">
     <footer class="footer">
         <div class="container">
-            <div class="dashboard col-xs-6">
-                <div class="dashProduct">
-                    <div class="dashLabel">
-                        Product: {{currentProduct}}
-                    </div>
-                    <div class="dashThumb">
-                    </div>
-                </div>
-                <div class="dashImage col-xs-6 col-sm-4">
-                    <div class="dashLabel">
-                        Image: {{currentImage}}
-                    </div>
-                    <div class="dashThumb">
-                    </div>
-                </div>
-            </div>
-            <div class="upload col-xs-6">
-                <span>
-                {{#if status}}
-                    <p>Uploading</p>
-                {{else}}
-                    <p>Not uploading</p>
-                {{/if}}
-                {{> uploader}}
-                    </span>
+            <div class="dashboard">
+                <table border="0">
+                    <tr>
+                        <td>Selected product: {{currentProduct}}</td>
+                        <td>
+                            <span>
+                                <a class="clearProduct" href="#">Clear</a>
+                                <a href="/products"> Change </a>
+                                <a class="visualize" href="#">View</a>
+                            </span>
+                        </td>
+                        <td class="dashupload">{{> uploader}}</td>
+                    </tr>
+                </table>
             </div>
         </div>
     </footer>

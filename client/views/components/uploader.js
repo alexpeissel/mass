@@ -36,7 +36,10 @@ Template.uploader.events({
                     } catch (error) {
                         Session.set("isUploading", false);
                         console.log(error);
+                    } finally {
+                        clearCanvas(tempCanvas);
                     }
+
                     Session.set("isUploading", false);
                 };
                 img.src = imageData;
@@ -47,6 +50,11 @@ Template.uploader.events({
 
         for (var i = 0; i < fileList.length; i++) {
             setupReader(fileList[i]);
+        }
+
+        function clearCanvas(canvas){
+            ctx = canvas.getContext('2d');
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
         }
 
         function detectMarker(img, canvas) {

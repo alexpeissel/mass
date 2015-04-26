@@ -2,7 +2,7 @@ if (Meteor.isClient) {
 
     Template.footer.helpers({
         currentProduct: function () {
-            return Session.get("currentProduct");
+            return Session.get("currentProduct") ? Products.findOne({_id: Session.get("currentProduct")}).name : "None";
         },
 
         currentImage: function () {
@@ -17,6 +17,16 @@ if (Meteor.isClient) {
             }
             return Session.get("isUploading")
 
+        }
+    });
+
+    Template.footer.events({
+        "click .clearProduct": function() {
+                Session.set("currentProduct", "");
+        },
+
+        "click .visualize": function() {
+            Session.set("currentProduct", "");
         }
     });
 }

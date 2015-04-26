@@ -17,3 +17,7 @@ Router.route('/products', function () {
 Router.route('/admin', function () {
     this.render('adminPage');
 });
+
+Router.route('/vis', function () {
+    this.render('visualizer');
+});

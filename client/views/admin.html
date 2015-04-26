@@ -24,6 +24,7 @@
             <th>Price</th>
             <th>External URL</th>
             <th>Models</th>
+            <th>Images</th>
             <th>Actions</th>
         </tr>
         </thead>
@@ -38,15 +39,37 @@
                     <div class="dropdown">
                         <button class="btn btn-sm dropdown-toggle" type="button" id="dropdownMenu1"
                                 data-toggle="dropdown" aria-expanded="true">
-                            Dropdown
+                            {{activeModel}}
                             <span class="caret"></span>
                         </button>
                         <ul class="dropdown-menu" role="menu" aria-labelledby="dropdownMenu1">
-                            <li role="presentation"><a role="menuitem" tabindex="-1" href="#">Action</a></li>
-                            <li role="presentation"><a role="menuitem" tabindex="-1" href="#">Another action</a></li>
-                            <li role="presentation"><a role="menuitem" tabindex="-1" href="#">Something else here</a>
+                                <li role="presentation">
+                                    <a role="menuitem" tabindex="-1" href="#">
+                                        <span>
+                                           {{model}}
+                                        </span>
+                                    </a>
+                                </li>
+                            <li role="presentation"><a role="menuitem" tabindex="-1" href="#"><span class="glyphicon glyphicon glyphicon-plus" aria-hidden="true"></span> Upload</a></li>
+                        </ul>
+                    </div>
+                </td>
+                <td>
+                    <div class="dropdown">
+                        <button class="btn btn-sm dropdown-toggle" type="button" id="dropdownMenu1"
+                                data-toggle="dropdown" aria-expanded="true">
+                            {{activeImage}}
+                            <span class="caret"></span>
+                        </button>
+                        <ul class="dropdown-menu" role="menu" aria-labelledby="dropdownMenu1">
+                            <li role="presentation">
+                                <a role="menuitem" tabindex="-1" href="#">
+                                        <span>
+                                            {{image}}
+                                        </span>
+                                </a>
                             </li>
-                            <li role="presentation"><a role="menuitem" tabindex="-1" href="#">Separated link</a></li>
+                            <li role="presentation"><a role="menuitem" tabindex="-1" href="#"><span class="glyphicon glyphicon glyphicon-plus" aria-hidden="true"></span> Upload</a></li>
                         </ul>
                     </div>
                 </td>
@@ -64,7 +87,7 @@
         {{/each}}
         </tbody>
     </table>
-    <button type="button" class="btn btn-success add">
+    <button type="button" class="btn btn-success edit">
         <span class="glyphicon glyphicon glyphicon-plus" aria-hidden="true"></span> Add
     </button>
 
@@ -97,5 +120,5 @@
         <p>The format for adding new products is as follows:</p>
         <p><strong>{{csvPlaceholder}}</strong></p>
     </div>
-    <textarea class="csvInputTextbox" placeholder="{{csvPlaceholder}}" cols="30" rows="10" style="width: 100%;"></textarea>
+    <textarea class="csvInputTextbox" cols="30" rows="10" style="width: 100%;"></textarea>
 </template>

@@ -7,40 +7,10 @@ Template.productList.helpers({
 Template.product.events({
    'click .btn': function(e){
        var clickedButton = e.currentTarget;
-       //alert( $ );
-       bootbox.dialog({
-           title: 'View image',
-           message: $(clickedButton).val(),
-           buttons: {
-               close: {
-                   label: "Close",
-                   className: "btn btn-primary",
-                   callback: function () {
-                       //take some actions
-                   }
-               },
+       Session.set("currentProduct", $(clickedButton).val());
+       Session.set("changedProduct", true);
+       Router.go('gallery');
 
-               visualise: {
-                   label: "Visualise",
-                   className: "btn btn-primary",
-                   callback: function () {
-                       var product = $(clickedButton).val();
-                       Session.set("currentProduct", Products.findOne({_id: product}, {fields: {name:1}}).name);
-                       console.log(Products.findOne({_id: product}, {fields: {name:1}}).name);
-
-                   }
-               },
-
-               delete: {
-                   label: "Delete",
-                   className: "btn btn-danger",
-                   callback: function () {
-                       console.log(this._id);
-                       Images.remove(this._id);
-                   }
-               }
-           }
-       });
    }
 });
 
