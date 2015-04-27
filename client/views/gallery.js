@@ -6,32 +6,36 @@ Template.photoTile.events({
     'click': function () {
         var currentImage = this._id;
         Session.set("currentImage", Images.findOne({_id: currentImage})._id);
+
+        var available = Session.get("currentProduct") ? "" : " disabled";
+
         bootbox.dialog({
             title: 'View image',
             message: renderTemplate(Template.viewport),
             buttons: {
+                delete: {
+                    label: "Delete",
+                    className: "btn btn-danger",
+                    callback: function () {
+                        console.log(currentImage);
+                        Images.remove(currentImage);
+                    }
+                },
+
+                vendor: {
+                    label: "<span class=\"glyphicon glyphicon-shopping-cart\"></span> Visit vendor",
+                    className: "btn btn-primary" + available,
+                    callback: function () {
+                        var url = Products.findOne({_id: Session.get("currentProduct")}).link;
+                        window.location = url;
+                    }
+                },
+
                 close: {
                     label: "Close",
                     className: "btn btn-primary",
                     callback: function () {
                         //take some actions
-                    }
-                },
-
-                vendor: {
-                    label: "Visit sellers site <h1>derp</h1>",
-                    className: "btn btn-primary",
-                    callback: function () {
-
-                    }
-                },
-
-                delete: {
-                    label: "Delete",
-                    className: "btn btn-danger",
-                    callback: function () {
-                        console.log(this._id);
-                        Images.remove(this._id);
                     }
                 }
             }
@@ -49,8 +53,21 @@ Template.images.helpers({
 });
 
 Template.galleryPage.rendered = function () {
-  if (Session.get("changedProduct")) {
-      sAlert.success(Products.findOne({_id: Session.get("currentProduct")}).name + " is ready to view!", {effect: 'scale', position: 'bottom-right', timeout: '5000'});
-      Session.set("changedProduct", false)
-  }
+    if (Session.get("changedProduct")) {
+        sAlert.success(Products.findOne({_id: Session.get("currentProduct")}).name + " is ready to view!  Select an image to see the composed result.", {
+            effect: 'scale',
+            position: 'bottom-right',
+            timeout: '5000'
+        });
+        $.each($(".thumbnail"), function (index, value) {
+            $(this).delay(50 * index).animate({width: '+=20px', height: '+=20px'}, "fast");
+            $(this).delay(50 * index).animate({width: '-=20px', height: '-=20px'}, "fast");
+
+        });
+        Session.set("changedProduct", false)
+    }
 };
+
+//$.each($(".thumbnail"), function( index, value ) {
+//    $(this).animate({height: '300px', opacity: '0.4'}, "slow");
+//});

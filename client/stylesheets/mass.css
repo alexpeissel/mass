@@ -4,6 +4,10 @@ body {
     /*background-repeat: repeat-y;*/
 }
 
+img.selectedIMG{
+    border: 2px solid blue;
+}
+
 .productTile {
     padding: 5px;
     margin: 10px 2px 30px 2px;

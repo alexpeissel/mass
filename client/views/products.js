@@ -20,8 +20,10 @@ Tracker.autorun(function() {
 });
 
 Template.productSearch.rendered = function(){
-    Session.set('productSearchQuery', "");
-}
+    if (!Session.get("productSearchQuery")){
+        Session.set('productSearchQuery', "");
+    }
+};
 
 Template.productSearch.events({
     'keyup [type=text]': function(event, template) {
