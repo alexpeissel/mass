@@ -8,13 +8,15 @@ Template.photoTile.events({
         Session.set("currentImage", Images.findOne({_id: currentImage})._id);
 
         var available = Session.get("currentProduct") ? "" : " disabled";
+        var currentImageName = this.original.name;
+        var currentProductName = Products.findOne({_id: Session.get("currentProduct")}).name;
 
         bootbox.dialog({
-            title: 'View image',
+            title: "Viewing " + currentImageName + " with a " + currentProductName,
             message: renderTemplate(Template.viewport),
             buttons: {
                 delete: {
-                    label: "Delete",
+                    label: "<span class=\"glyphicon glyphicon-remove\"></span> Delete",
                     className: "btn btn-danger",
                     callback: function () {
                         console.log(currentImage);
@@ -31,11 +33,55 @@ Template.photoTile.events({
                     }
                 },
 
+                save: {
+                    label: "<span class=\"glyphicon glyphicon-download-alt\"></span> Save",
+                    className: "btn btn-primary disabled",
+                    callback: function () {
+                        var canvas = document.getElementById('viewportCanvas');
+                        data = canvas.toDataURL();
+                        window.location = data;
+
+                        //Prevents dialog from closing
+                        return false;
+
+                    }
+                },
+
                 close: {
                     label: "Close",
                     className: "btn btn-primary",
                     callback: function () {
-                        //take some actions
+                        return true;
+                    }
+                },
+
+                x: {
+                    label: "+ X",
+                    className: "btn btn-primary",
+                    callback: function () {
+                        Session.set("updatedControls", true);
+                        Session.set("control", "x");
+                        return false;
+                    }
+                },
+
+                y: {
+                    label: "+ Y",
+                    className: "btn btn-primary",
+                    callback: function () {
+                        Session.set("updatedControls", true);
+                        Session.set("control", "y");
+                        return false;
+                    }
+                },
+
+                z: {
+                    label: "+ Z",
+                    className: "btn btn-primary",
+                    callback: function () {
+                        Session.set("updatedControls", true);
+                        Session.set("control", "z");
+                        return false;
                     }
                 }
             }
@@ -67,7 +113,3 @@ Template.galleryPage.rendered = function () {
         Session.set("changedProduct", false)
     }
 };
-
-//$.each($(".thumbnail"), function( index, value ) {
-//    $(this).animate({height: '300px', opacity: '0.4'}, "slow");
-//});

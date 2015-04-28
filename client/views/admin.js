@@ -6,7 +6,7 @@ Template.productDashboard.helpers({
 
     activeModel: function (){
         if (this.model) {
-            return this.model
+            return this.model.original.name
         } else {
             return "Model"
         }
@@ -89,6 +89,39 @@ Template.productDashboard.events({
                 Products.remove({_id: thisProduct});
             }
         });
+    },
+
+    "click .modelUpload": function() {
+        var thisProduct = this._id;
+
+        bootbox.dialog({
+            title: "Upload model",
+            message: renderTemplate(Template.modelUpload),
+            buttons: {
+                delete: {
+                    label: "<span class=\"glyphicon glyphicon-remove\"></span> Delete",
+                    className: "btn btn-danger",
+                    callback: function () {
+
+                    }
+                }
+            }
+        });
+
+    }
+});
+
+Template.modelUpload.events({
+    'change .modelUploadForm': function () {
+        var currentProduct = Products.findOne({_id: Session.get("editingProduct")});
+        var file = $('.modelUploadForm').get(0).files[0];
+        var fileObj = productModels.insert(file);
+
+        currentProduct.model = fileObj;
+
+        Products.update({_id: currentProduct._id}, currentProduct);
+
+        alert(Products.findOne)
     }
 });
 
@@ -107,16 +140,16 @@ Template.csvInput.rendered = function () {
     Session.set("editProduct", "");
 };
 
-Template.productImport.events({
-    'change .productImporter': function (event, template) {
-        var file = $('.productImporter').get(0).files[0];
-        var fileObj = Models.insert(file);
-        Products.insert({
-            name: "test",
-            model: fileObj
-        });
-    }
-});
+//Template.productImport.events({
+//    'change .productImporter': function (event, template) {
+//        var file = $('.productImporter').get(0).files[0];
+//        var fileObj = Models.insert(file);
+//        Products.insert({
+//            name: "test",
+//            model: fileObj
+//        });
+//    }
+//});
 
 function csvToObject(data) {
     var parsedData = Papa.parse(data);

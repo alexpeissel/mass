@@ -52,26 +52,12 @@ var productThumbStore = new FS.Store.GridFS("productThumb", {
     }
 });
 
-//Create the store for rendered images
-var renderedStore = new FS.Store.GridFS("rendered", {
-    transformWrite: function(fileObj, readStream, writeStream) {
-        gm(readStream, fileObj.name)
-            .resize(270,220,"^")
-            .gravity('Center')
-            .crop(270, 220)
-            .quality(100)
-            .autoOrient()
-            .stream()
-            .pipe(writeStream);
-    }
-});
-
 //Create the master store
 var masterStore = new FS.Store.GridFS("master");
 
 //Create globally scoped Images collection.
 Images = new FS.Collection("images", {
-    stores: [thumbnailStore, masterStore, productStore, renderedStore],
+    stores: [thumbnailStore, masterStore, productStore],
     filter: {
         maxSize: 10485760, //in bytes
         allow: {

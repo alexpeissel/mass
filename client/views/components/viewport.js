@@ -1,15 +1,17 @@
 Template.viewport.rendered = function () {
+
     console.log("Starting webGL");
 
     // Set up the scene, camera, and renderer as global variables.
-    var renderer, canvas, camera, scene, backgroundCamera, backgroundScene, mesh;
+    var renderer, canvas, camera, scene, backgroundCamera, backgroundScene, mesh, model;
 
-    var fps = 2;
+    var fps = 30;
 
     //Load image (requires DB integration - pass in imageID as parameter and load?)
     var image = new Image();
 
     var imageUrl = Images.findOne({_id: Session.get("currentImage")}).url({store: 'master'});
+    //var modelURL = Products.findOne({_id: Session.get("currentProduct")}).url({store: 'models'});
     var position = Images.findOne({_id: Session.get("currentImage")}).metadata;
 
     console.log("Using " + imageUrl);
@@ -23,12 +25,13 @@ Template.viewport.rendered = function () {
         initCanvas(canvas, image);
 
         //Set up renderer and point it at canvas
-        renderer = new THREE.WebGLRenderer({canvas: canvas, antialias: true});
+        renderer = new THREE.WebGLRenderer({canvas: canvas, antialias: true, preserveDrawingBuffer: true});
         renderer.setSize(canvas.width, canvas.height);
         renderer.autoClear = false;
+        //renderer.setClearColor(0x000044);
 
         //Set up cameras
-        camera = new THREE.PerspectiveCamera(45, canvas.width / canvas.height, 1, 1000);
+        camera = new THREE.PerspectiveCamera(60, canvas.width / canvas.height, 1, 10000);
         camera.position.z = 500;
         backgroundCamera = new THREE.Camera();
 
@@ -36,37 +39,42 @@ Template.viewport.rendered = function () {
         scene = new THREE.Scene();
         backgroundScene = new THREE.Scene();
 
+        var light;  // A light shining from the direction of the camera.
+        light = new THREE.DirectionalLight();
+        light.position.set(0,0,1);
+        scene.add(light);
+
         //Add model and background
-        loadModel(scene, '/models/car.js', true);
         createBackground(backgroundScene, imageUrl, backgroundCamera);
+        loadModel(scene, '/models/test/smart.js', false);
 
         // responsive resize
         canvas.style.width = "100%";
         canvas.style.height = "100%";
-
-        Session.set("snapshotted", false);
 
         animate();
     });
 
     function loadModel(scene, url, boxed) {
         //Instantiate a loader
-        loader = new THREE.JSONLoader();
-        loader.load(url, function (geometry, material) {
-            material = new THREE.MeshBasicMaterial(
-                {
-                    map: THREE.ImageUtils.loadTexture("/models/gtare.jpg"),
-                    depthTest: false,
-                    depthWrite: false
-                }),
+        var loader = new THREE.JSONLoader();
 
-                mesh = new THREE.Mesh(
-                    geometry,
-                    material
-                );
+        loader.load(url, loadModelCallback);
 
-            mesh.receiveShadow = true;
-            mesh.castShadow = true;
+            //material = new THREE.MeshBasicMaterial(
+            //    {
+            //        map: THREE.ImageUtils.loadTexture("/models/test/smart.jpg"),
+            //        depthTest: false,
+            //        depthWrite: false
+            //    }),
+            //
+            //    mesh = new THREE.Mesh(
+            //        geometry,
+            //        material
+            //    );
+            //
+            //mesh.receiveShadow = true;
+            //mesh.castShadow = true;
 
             if (boxed) {
                 //hot cube action
@@ -82,10 +90,21 @@ Template.viewport.rendered = function () {
 
             }
 
-            updateModelPosition(mesh);
+        };
 
-            scene.add(mesh);
-        });
+    function loadModelCallback (geometry, materials) {
+        var object = new THREE.Mesh(geometry, new THREE.MeshFaceMaterial(materials));
+        console.log(materials);
+        for (i = 0; i < materials.length; i++) {
+            if (materials[i].name) {
+                console.log(materials[i].name);
+            }
+        }
+
+        mesh = new THREE.Object3D();
+        mesh.add(object);
+        updateModelPosition(mesh);
+        scene.add(mesh);
     }
 
     function createBackground(scene, url, camera) {
@@ -109,16 +128,30 @@ Template.viewport.rendered = function () {
     // this function is executed on each animation frame
     function animate() {
 
+        if (Session.get("updatedControls")){
+            if (Session.equals("control", "x")){
+                mesh.scale.x -= 0.1;
+                mesh.scale.y -= 0.1;
+                mesh.scale.z -= 0.1;
+                console.log("X: " + mesh.scale.x + " Y: " + mesh.scale.y + " Z: " + mesh.scale.z)
+
+            } else if (Session.equals("control", "y")) {
+                //mesh.position.y += 10;
+
+            } else if (Session.equals("control", "z")) {
+                //mesh.position.z += 10;
+            } else {
+                alert("Goofed");
+            }
+
+            Session.set("control", "");
+            Session.set("updatedControls", false);
+        }
+
         // render
         renderer.clear();
         renderer.render(backgroundScene, backgroundCamera);
         renderer.render(scene, camera);
-
-        if (Session.equals("snapshotted", false)) {
-            Session.set("snapshotted", true);
-            Session.set("imageData", canvas.toDataURL());
-        }
-
 
         // request new frame
         setTimeout(function () {
@@ -142,6 +175,7 @@ Template.viewport.rendered = function () {
         object.position.x = position.position.x;
         object.position.y = position.position.y;
         object.position.z = position.position.z;
+        object.position.z += 200;
     }
 
 };

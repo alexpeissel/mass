@@ -1,5 +1,26 @@
 Products = new  Mongo.Collection("products");
 
+var modelStore = new FS.Store.GridFS('modelStore');
+
+productModels = new FS.Collection('productModels', {
+    stores: [modelStore]
+});
+
+productModels.allow({
+    insert: function () {
+        return true;
+    },
+    update: function () {
+        return true;
+    },
+    remove: function () {
+        return true;
+    },
+    download: function () {
+        return true;
+    }
+});
+
 function addInitalData() {
     if (Products.find().count() === 0) {
         console.log("Adding inital data");
@@ -7,7 +28,8 @@ function addInitalData() {
         for (var i = 0; i < 10; i++) {
             console.log(i + ' doc indexed');
             brands = ["Sony", "Panasonic", "Apple", "Philips"];
-            models = ["10000", "a-tron", "Atomic", "Laserdisk", "Watch", "Blast", "Device"]
+            names = ["10000", "a-tron", "Atomic", "Laserdisk", "Watch", "Blast", "Device"];
+            models = [];
             Products.insert({
                 name: randElement(brands) + " " + randElement(models),
                 createdAt: new Date().getTime(),
@@ -15,7 +37,7 @@ function addInitalData() {
                 link: "http://www.google.com",
                 price: "10.99",
                 image: null,
-                model: null
+                model: randElement(models)
             });
         }
 
@@ -24,7 +46,7 @@ function addInitalData() {
 }
 
 function randElement(arr){
-    return arr[Math.floor(Math.random() * brands.length)];
+    return arr[Math.floor(Math.random() * arr.length)];
 }
 
 Products.search = function(query) {

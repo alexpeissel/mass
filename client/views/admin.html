@@ -50,7 +50,7 @@
                                         </span>
                                     </a>
                                 </li>
-                            <li role="presentation"><a role="menuitem" tabindex="-1" href="#"><span class="glyphicon glyphicon glyphicon-plus" aria-hidden="true"></span> Upload</a></li>
+                            <li role="presentation"><a class="modelUpload" role="menuitem" tabindex="-1" href="#"><span class="glyphicon glyphicon glyphicon-plus" aria-hidden="true"></span> Upload</a></li>
                         </ul>
                     </div>
                 </td>
@@ -69,7 +69,7 @@
                                         </span>
                                 </a>
                             </li>
-                            <li role="presentation"><a role="menuitem" tabindex="-1" href="#"><span class="glyphicon glyphicon glyphicon-plus" aria-hidden="true"></span> Upload</a></li>
+                            <li role="presentation"><a class="imageUpload" role="menuitem" tabindex="-1" href="#"><span class="glyphicon glyphicon glyphicon-plus" aria-hidden="true"></span> Upload</a></li>
                         </ul>
                     </div>
                 </td>
@@ -121,4 +121,10 @@
         <p><strong>{{csvPlaceholder}}</strong></p>
     </div>
     <textarea class="csvInputTextbox" cols="30" rows="10" style="width: 100%;"></textarea>
+</template>
+
+<template name="modelUpload">
+    <h3>Upload model</h3>
+    Browse <input class="modelUploadForm" type="file">
+
 </template>

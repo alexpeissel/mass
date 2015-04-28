@@ -66,7 +66,7 @@ Template.uploader.events({
 
             console.log("Canvas " + canvas.id + " found with width: " + canvas.width + " Height: " + canvas.height);
 
-            var modelSize = 35.0; //millimeters
+            var modelSize = 50; //millimeters
 
             var validImage = {
                 rotation: {

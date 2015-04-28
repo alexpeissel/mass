@@ -9,12 +9,23 @@
    <div class="section">
     <div class="container">
         <div id="images">
-            {{#each images}}
-                {{> photoTile}}
-            {{/each}}
+            {{#if images.count}}
+                {{#each images}}
+                    {{> photoTile}}
+                {{/each}}
+            {{else}}
+                <div class="emptySearch">
+                    <h3>No images found.</h3>
+                    <h4>Start here:</h4>
+                    <div style="display:table-cell;vertical-align:middle;">
+                    <div style="margin-left:auto;margin-right:auto;">{{> uploader}}</div>
+                </div>
+                </div>
+            {{/if}}
         </div>
     </div>
 </div>
+
 </template>
 
 <template name="photoTile">
