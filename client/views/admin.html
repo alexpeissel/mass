@@ -7,7 +7,7 @@
             <hr>
             {{> productImport}}
             <hr>
-            {{> brandingImport}}
+            {{> brandUpload}}
             <hr>
             {{> accountManagement}}
         </div>
@@ -23,8 +23,8 @@
             <th>Description</th>
             <th>Price</th>
             <th>External URL</th>
-            <th>Models</th>
             <th>Images</th>
+            <th>Models</th>
             <th>Actions</th>
         </tr>
         </thead>
@@ -39,18 +39,20 @@
                     <div class="dropdown">
                         <button class="btn btn-sm dropdown-toggle" type="button" id="dropdownMenu1"
                                 data-toggle="dropdown" aria-expanded="true">
-                            {{activeModel}}
+                                {{activeImage}}
                             <span class="caret"></span>
                         </button>
                         <ul class="dropdown-menu" role="menu" aria-labelledby="dropdownMenu1">
-                                <li role="presentation">
-                                    <a role="menuitem" tabindex="-1" href="#">
+                            <li role="presentation">
+                                <a role="menuitem" tabindex="-1" href="#">
                                         <span>
-                                           {{model}}
+                                            {{image.original.name}}
                                         </span>
-                                    </a>
-                                </li>
-                            <li role="presentation"><a class="modelUpload" role="menuitem" tabindex="-1" href="#"><span class="glyphicon glyphicon glyphicon-plus" aria-hidden="true"></span> Upload</a></li>
+                                </a>
+                            </li>
+                            <li role="presentation"><a class="imageUpload" role="menuitem" tabindex="-1" href="#"><span
+                                    class="glyphicon glyphicon glyphicon-plus" aria-hidden="true"></span> Upload</a>
+                            </li>
                         </ul>
                     </div>
                 </td>
@@ -58,18 +60,20 @@
                     <div class="dropdown">
                         <button class="btn btn-sm dropdown-toggle" type="button" id="dropdownMenu1"
                                 data-toggle="dropdown" aria-expanded="true">
-                            {{activeImage}}
+                            {{activeModel}}
                             <span class="caret"></span>
                         </button>
                         <ul class="dropdown-menu" role="menu" aria-labelledby="dropdownMenu1">
                             <li role="presentation">
                                 <a role="menuitem" tabindex="-1" href="#">
                                         <span>
-                                            {{image}}
+                                            {{model.original.name}}
                                         </span>
                                 </a>
                             </li>
-                            <li role="presentation"><a class="imageUpload" role="menuitem" tabindex="-1" href="#"><span class="glyphicon glyphicon glyphicon-plus" aria-hidden="true"></span> Upload</a></li>
+                            <li role="presentation"><a class="modelUpload" role="menuitem" tabindex="-1" href="#"><span
+                                    class="glyphicon glyphicon glyphicon-plus" aria-hidden="true"></span> Upload</a>
+                            </li>
                         </ul>
                     </div>
                 </td>
@@ -95,36 +99,50 @@
 
 <template name="productImport">
     <h3>Product import/export</h3>
+
     <div class="alert alert-info" role="alert">...</div>
 
     <span class="btn btn-default btn-file">
     Browse <input class="productImporter" type="file">
 </span>
-</template>
 
-<template name="brandingImport">
-    <h3>Branding import</h3>
-    <div class="alert alert-info" role="alert">...</div>
-
-    <span class="btn btn-default btn-file">
-    Browse <input class="brandImporter" type="file">
-</span>
 </template>
 
 <template name="accountManagement">
     <h3>Manage account</h3>
+
 </template>
 
 <template name="csvInput">
     <div class="alert alert-info" role="alert">
         <p>The format for adding new products is as follows:</p>
-        <p><strong>{{csvPlaceholder}}</strong></p>
+
+        <p><strong>name,description,price,link</strong></p>
     </div>
     <textarea class="csvInputTextbox" cols="30" rows="10" style="width: 100%;"></textarea>
+
 </template>
 
 <template name="modelUpload">
     <h3>Upload model</h3>
+
+    <div class="alert alert-info" role="alert">...</div>
     Browse <input class="modelUploadForm" type="file">
+
+</template>
+
+<template name="imageUpload">
+    <h3>Upload image</h3>
+
+    <div class="alert alert-info" role="alert">...</div>
+    Browse <input class="imageUploadForm" type="file">
+
+</template>
+
+<template name="brandUpload">
+    <h3>Upload branding images</h3>
+
+    <div class="alert alert-info" role="alert">...</div>
+    Browse <input class="brandUploadForm" type="file">
 
 </template>

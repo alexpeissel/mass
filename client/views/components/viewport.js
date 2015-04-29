@@ -1,9 +1,11 @@
+//https://github.com/CollectionFS/Meteor-CollectionFS/issues/648
+
 Template.viewport.rendered = function () {
 
     console.log("Starting webGL");
 
     // Set up the scene, camera, and renderer as global variables.
-    var renderer, canvas, camera, scene, backgroundCamera, backgroundScene, mesh, model;
+    var renderer, canvas, camera, scene, backgroundCamera, backgroundScene, mesh;
 
     var fps = 30;
 
@@ -11,7 +13,11 @@ Template.viewport.rendered = function () {
     var image = new Image();
 
     var imageUrl = Images.findOne({_id: Session.get("currentImage")}).url({store: 'master'});
-    //var modelURL = Products.findOne({_id: Session.get("currentProduct")}).url({store: 'models'});
+
+    var modelId = Products.findOne({_id: Session.get("currentProduct")}).model._id;
+    var modelURL = productModels.findOne({_id: modelId}).url();
+
+
     var position = Images.findOne({_id: Session.get("currentImage")}).metadata;
 
     console.log("Using " + imageUrl);
@@ -41,12 +47,12 @@ Template.viewport.rendered = function () {
 
         var light;  // A light shining from the direction of the camera.
         light = new THREE.DirectionalLight();
-        light.position.set(0,0,1);
+        light.position.set(0, 0, 1);
         scene.add(light);
 
         //Add model and background
         createBackground(backgroundScene, imageUrl, backgroundCamera);
-        loadModel(scene, '/models/test/smart.js', false);
+        loadModel(scene, modelURL, false);
 
         // responsive resize
         canvas.style.width = "100%";
@@ -61,50 +67,62 @@ Template.viewport.rendered = function () {
 
         loader.load(url, loadModelCallback);
 
-            //material = new THREE.MeshBasicMaterial(
-            //    {
-            //        map: THREE.ImageUtils.loadTexture("/models/test/smart.jpg"),
-            //        depthTest: false,
-            //        depthWrite: false
-            //    }),
-            //
-            //    mesh = new THREE.Mesh(
-            //        geometry,
-            //        material
-            //    );
-            //
-            //mesh.receiveShadow = true;
-            //mesh.castShadow = true;
+        if (boxed) {
+            //hot cube action
+            console.log("Adding guide box");
+            var cube = new THREE.Mesh(new THREE.CubeGeometry(200, 200, 200), new THREE.MeshBasicMaterial({
+                    wireframe: true,
+                    color: 'blue'
+                })
+            );
+            cube.overdraw = true;
+            scene.add(cube);
+            updateModelPosition(cube);
 
-            if (boxed) {
-                //hot cube action
-                console.log("Adding guide box");
-                var cube = new THREE.Mesh(new THREE.CubeGeometry(200, 200, 200), new THREE.MeshBasicMaterial({
-                        wireframe: true,
-                        color: 'blue'
-                    })
-                );
-                cube.overdraw = true;
-                scene.add(cube);
-                updateModelPosition(cube);
-
-            }
-
-        };
-
-    function loadModelCallback (geometry, materials) {
-        var object = new THREE.Mesh(geometry, new THREE.MeshFaceMaterial(materials));
-        console.log(materials);
-        for (i = 0; i < materials.length; i++) {
-            if (materials[i].name) {
-                console.log(materials[i].name);
-            }
         }
 
-        mesh = new THREE.Object3D();
-        mesh.add(object);
+    };
+
+    function loadModelCallback(geometry, material) {
+
+        material = new THREE.MeshBasicMaterial(
+            {
+                map: THREE.ImageUtils.loadTexture("/models/dog.jpg"),
+                depthTest: false,
+                depthWrite: false
+            }),
+            mesh = new THREE.Mesh(
+                geometry,
+                material
+            );
+
+        mesh.receiveShadow = true;
+        mesh.castShadow = true;
+
+        //mesh = new THREE.Object3D();
+        //mesh.add(object);
         updateModelPosition(mesh);
         scene.add(mesh);
+    }
+
+    function getMaterial(path) {
+        var image = new Image();
+        var material = new THREE.MeshBasicMaterial({
+            map: new THREE.Texture(image),
+            depthTest: false,
+            depthWrite: false
+        });
+
+        with ({material: material}) {
+            image.onload = function () {
+                this.loaded = true;
+                material.map.image = this;
+            };
+        }
+        image.src = path;
+        console.log(image);
+
+        return material;
     }
 
     function createBackground(scene, url, camera) {
@@ -128,8 +146,8 @@ Template.viewport.rendered = function () {
     // this function is executed on each animation frame
     function animate() {
 
-        if (Session.get("updatedControls")){
-            if (Session.equals("control", "x")){
+        if (Session.get("updatedControls")) {
+            if (Session.equals("control", "x")) {
                 mesh.scale.x -= 0.1;
                 mesh.scale.y -= 0.1;
                 mesh.scale.z -= 0.1;
@@ -175,7 +193,44 @@ Template.viewport.rendered = function () {
         object.position.x = position.position.x;
         object.position.y = position.position.y;
         object.position.z = position.position.z;
-        object.position.z += 200;
+        //object.position.z += 200;
     }
 
 };
+
+Template.orienter.events({
+    "click .capture": function () {
+
+        //if (window.DeviceMotionEvent != undefined) {
+        //
+        //    function sample() {
+        //        var acceleration;
+        //        window.ondevicemotion = function (e) {
+        //
+        //            acceleration = {
+        //                x: event.accelerationIncludingGravity.x,
+        //                y: event.accelerationIncludingGravity.y,
+        //                z: event.accelerationIncludingGravity.z
+        //            }
+        //        };
+        //        return acceleration;
+        //    }
+        //
+        //    function scan(data) {
+        //        if (data.x > 8) {
+        //            alert("derp");
+        //        }
+        //    }
+        //
+        //    setInterval(alert("hello"), 1000);
+        //
+        //    document.getElementById("orientationView").innerHTML =
+        //        acceleration.x.toString() + " "
+        //        + acceleration.y.toString() + " "
+        //        + acceleration.z.toString();
+        //
+        //} else {
+        //    alert("No detection capability found");
+        //}
+    }
+});

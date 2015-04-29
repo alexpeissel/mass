@@ -6,89 +6,99 @@ Template.photoTile.events({
     'click': function () {
         var currentImage = this._id;
         Session.set("currentImage", Images.findOne({_id: currentImage})._id);
+        var currentImageName = this.original.name;
 
         var available = Session.get("currentProduct") ? "" : " disabled";
-        var currentImageName = this.original.name;
-        var currentProductName = Products.findOne({_id: Session.get("currentProduct")}).name;
 
-        bootbox.dialog({
-            title: "Viewing " + currentImageName + " with a " + currentProductName,
-            message: renderTemplate(Template.viewport),
-            buttons: {
-                delete: {
-                    label: "<span class=\"glyphicon glyphicon-remove\"></span> Delete",
-                    className: "btn btn-danger",
-                    callback: function () {
-                        console.log(currentImage);
-                        Images.remove(currentImage);
-                    }
-                },
+        if (!Session.get("currentProduct")) {
+            alert("no prod");
+        } else {
+            var currentProductName = Products.findOne({_id: Session.get("currentProduct")}).name;
 
-                vendor: {
-                    label: "<span class=\"glyphicon glyphicon-shopping-cart\"></span> Visit vendor",
-                    className: "btn btn-primary" + available,
-                    callback: function () {
-                        var url = Products.findOne({_id: Session.get("currentProduct")}).link;
-                        window.location = url;
-                    }
-                },
+            bootbox.dialog({
+                title: "Viewing " + currentImageName + " with a " + currentProductName,
+                message: renderTemplate(Template.viewport),
+                buttons: {
+                    delete: {
+                        label: "<span class=\"glyphicon glyphicon-remove\"></span> Delete",
+                        className: "btn btn-danger",
+                        callback: function () {
+                            console.log(currentImage);
+                            Images.remove(currentImage);
+                        }
+                    },
 
-                save: {
-                    label: "<span class=\"glyphicon glyphicon-download-alt\"></span> Save",
-                    className: "btn btn-primary disabled",
-                    callback: function () {
-                        var canvas = document.getElementById('viewportCanvas');
-                        data = canvas.toDataURL();
-                        window.location = data;
+                    vendor: {
+                        label: "<span class=\"glyphicon glyphicon-shopping-cart\"></span> Visit vendor",
+                        className: "btn btn-primary" + available,
+                        callback: function () {
+                            var url = Products.findOne({_id: Session.get("currentProduct")}).link;
+                            window.location = url;
+                        }
+                    },
 
-                        //Prevents dialog from closing
-                        return false;
+                    save: {
+                        label: "<span class=\"glyphicon glyphicon-download-alt\"></span> Save",
+                        className: "btn btn-primary disabled",
+                        callback: function () {
+                            var canvas = document.getElementById('viewportCanvas');
+                            data = canvas.toDataURL();
+                            window.location = data;
 
-                    }
-                },
+                            //Prevents dialog from closing
+                            return false;
 
-                close: {
-                    label: "Close",
-                    className: "btn btn-primary",
-                    callback: function () {
-                        return true;
-                    }
-                },
+                        }
+                    },
 
-                x: {
-                    label: "+ X",
-                    className: "btn btn-primary",
-                    callback: function () {
-                        Session.set("updatedControls", true);
-                        Session.set("control", "x");
-                        return false;
-                    }
-                },
+                    close: {
+                        label: "Close",
+                        className: "btn btn-primary",
+                        callback: function () {
+                            return true;
+                        }
+                    },
 
-                y: {
-                    label: "+ Y",
-                    className: "btn btn-primary",
-                    callback: function () {
-                        Session.set("updatedControls", true);
-                        Session.set("control", "y");
-                        return false;
-                    }
-                },
+                    //orient: {
+                    //    label: "Orient",
+                    //    className: "btn btn-primary",
+                    //    callback: function () {
+                    //        bootbox.dialog({
+                    //            title: "Set orientation",
+                    //            message: renderTemplate(Template.orienter),
+                    //            buttons: {
+                    //                save: {
+                    //                    label: "<span class=\"glyphicon glyphicon-remove\"></span> Save",
+                    //                    className: "btn btn-default",
+                    //                    callback: function () {
+                    //
+                    //                    }
+                    //                }
+                    //            }
+                    //        });
+                    //    }
+                    //},
 
-                z: {
-                    label: "+ Z",
-                    className: "btn btn-primary",
-                    callback: function () {
-                        Session.set("updatedControls", true);
-                        Session.set("control", "z");
-                        return false;
+                    scale: {
+                        label: "Rescale",
+                        className: "btn btn-primary",
+                        callback: function () {
+                            Session.set("updatedControls", true);
+                            Session.set("control", "x");
+                            return false;
+                        }
                     }
                 }
-            }
-        });
+            });
 
+        }
     }
+});
 
+Template.photoTile.helpers({
+   "shortened": function (data) {
+       return shorten(data);
+   }
 });
 
 Template.images.helpers({

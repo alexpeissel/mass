@@ -4,14 +4,8 @@
             <div class="dashboard">
                 <table border="0">
                     <tr>
-                        <td>Selected product: {{currentProduct}}</td>
-                        <td>
-                            <span>
-                                <a class="clearProduct" href="#">Clear</a>
-                                <a href="/products"> Change </a>
-                                <a class="visualize" href="#">View</a>
-                            </span>
-                        </td>
+                        <td>Selected product: <strong>{{currentProduct}}</strong></td>
+                        <td class="footerLink"><a class="clearProduct" href="#">Clear</a></td>
                         <td class="dashupload">{{> uploader}}</td>
                     </tr>
                 </table>

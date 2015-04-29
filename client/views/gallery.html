@@ -6,25 +6,22 @@
 </template>
 
 <template name="images">
-   <div class="section">
-    <div class="container">
-        <div id="images">
-            {{#if images.count}}
-                {{#each images}}
-                    {{> photoTile}}
-                {{/each}}
-            {{else}}
-                <div class="emptySearch">
-                    <h3>No images found.</h3>
-                    <h4>Start here:</h4>
-                    <div style="display:table-cell;vertical-align:middle;">
-                    <div style="margin-left:auto;margin-right:auto;">{{> uploader}}</div>
-                </div>
-                </div>
-            {{/if}}
+    <div class="section">
+        <div class="container">
+            <div id="images">
+                {{#if images.count}}
+                    {{#each images}}
+                        {{> photoTile}}
+                    {{/each}}
+                {{else}}
+                    <div class="emptySearch">
+                        <h3>No images found.</h3>
+                        <h4>Start by clicking the arrow below :)</h4>
+                    </div>
+                {{/if}}
+            </div>
         </div>
     </div>
-</div>
 
 </template>
 
@@ -34,8 +31,10 @@
             <div>
                 <img src="{{this.url store='thumbnail' uploading='/images/hex.gif' storing='/images/hex.gif'}}" alt=""
                      class="thumbnail"/>
+
                 <div class="after">
-                    Delete {{this.name}}: {{#FS.DeleteButton class="btn btn-danger btn-xs"}}Delete Me{{/FS.DeleteButton}}
+                   <div class="trimmable">Delete {{this.name}}: </div>
+                    {{#FS.DeleteButton class="btn btn-danger btn-xs"}}Delete{{/FS.DeleteButton}}
                 </div>
             </div>
         </div>

@@ -1,21 +1,24 @@
 Template.productDashboard.helpers({
     products: function () {
-        //where user.type = business + business ID
-        return Products.find();
+        var loggedInUser = Meteor.user();
+        if (Roles.userIsInRole(loggedInUser, ['admin'])) {
+            return Products.find();
+        } else {
+            return Products.find({owner: loggedInUser});
+        }
     },
 
-    activeModel: function (){
+    activeModel: function () {
         if (this.model) {
             return this.model.original.name
         } else {
             return "Model"
         }
-
     },
 
-    activeImage: function (){
+    activeImage: function () {
         if (this.image) {
-            return this.image
+            return this.image.original.name
         } else {
             return "Image"
         }
@@ -43,35 +46,35 @@ Template.productDashboard.events({
                     className: "btn btn-primary",
                     callback: function () {
                         var converted = csvToObject($('.csvInputTextbox').val());
-                        if (Session.get("editingProduct")) {
-                            bootbox.confirm(
-                                "Change product to attributes: " +
-                                "name: \"" + converted.name +
-                                "\", description: \"" + converted.description +
-                                "\", price: \"" + converted.price +
-                                "\", link: \"" + converted.link +
-                                "\", image: \"" + converted.image +
-                                "\", model: \"" + converted.model + "\"?",
-                                function (result) {
-                                    if (result) {
-                                        Products.update({_id: Session.get("editingProduct")}, converted);
-                                    }
-                                });
-
+                        if (!converted) {
+                            return false;
                         } else {
-                            bootbox.confirm(
-                                "Add product with attributes: " +
-                                "name: \"" + converted.name +
-                                "\", description: \"" + converted.description +
-                                "\", price: \"" + converted.price +
-                                "\", link: \"" + converted.link +
-                                "\", image: \"" + converted.image +
-                                "\", model: \"" + converted.model + "\"?",
-                                function (result) {
-                                    if (result) {
-                                        Products.insert(converted);
-                                    }
-                                });
+                            if (Session.get("editingProduct")) {
+                                bootbox.confirm(
+                                    "Change product to attributes: " +
+                                    "name: \"" + converted.name +
+                                    "\", description: \"" + converted.description +
+                                    "\", price: \"" + converted.price +
+                                    "\", link: \"" + converted.link + "\"?",
+                                    function (result) {
+                                        if (result) {
+                                            Products.update({_id: Session.get("editingProduct")}, converted);
+                                        }
+                                    });
+
+                            } else {
+                                bootbox.confirm(
+                                    "Add product with attributes: " +
+                                    "name: \"" + converted.name +
+                                    "\", description: \"" + converted.description +
+                                    "\", price: \"" + converted.price +
+                                    "\", link: \"" + converted.link + "\"?",
+                                    function (result) {
+                                        if (result) {
+                                            Products.insert(converted);
+                                        }
+                                    });
+                            }
                         }
                     }
                 }
@@ -91,12 +94,31 @@ Template.productDashboard.events({
         });
     },
 
-    "click .modelUpload": function() {
-        var thisProduct = this._id;
+    "click .modelUpload": function () {
+        Session.set("editingProduct", this._id);
 
         bootbox.dialog({
             title: "Upload model",
             message: renderTemplate(Template.modelUpload),
+            buttons: {
+                delete: {
+                    label: "<span class=\"glyphicon glyphicon-remove\"></span> Delete",
+                    className: "btn btn-danger",
+                    callback: function () {
+
+                    }
+                }
+            }
+        });
+
+    },
+
+    "click .imageUpload": function () {
+        Session.set("editingProduct", this._id);
+
+        bootbox.dialog({
+            title: "Upload product image",
+            message: renderTemplate(Template.imageUpload),
             buttons: {
                 delete: {
                     label: "<span class=\"glyphicon glyphicon-remove\"></span> Delete",
@@ -113,6 +135,7 @@ Template.productDashboard.events({
 
 Template.modelUpload.events({
     'change .modelUploadForm': function () {
+
         var currentProduct = Products.findOne({_id: Session.get("editingProduct")});
         var file = $('.modelUploadForm').get(0).files[0];
         var fileObj = productModels.insert(file);
@@ -121,7 +144,19 @@ Template.modelUpload.events({
 
         Products.update({_id: currentProduct._id}, currentProduct);
 
-        alert(Products.findOne)
+    }
+});
+
+Template.imageUpload.events({
+    'change .imageUploadForm': function () {
+        var currentProduct = Products.findOne({_id: Session.get("editingProduct")});
+        var file = $('.imageUploadForm').get(0).files[0];
+        var fileObj = productThumbs.insert(file);
+
+        currentProduct.image = fileObj;
+
+        Products.update({_id: currentProduct._id}, currentProduct);
+
     }
 });
 
@@ -135,7 +170,9 @@ Template.csvInput.helpers({
 });
 
 Template.csvInput.rendered = function () {
-    var productData = _.values(Products.findOne({_id: Session.get("editingProduct")}, {fields: {'createdAt': 0}})).slice(1).join(",");
+    //var productData = _.values(Products.findOne({_id: Session.get("editingProduct")}, {fields: {'createdAt': 0}})).slice(1).join(",");
+    var currentProduct = Products.findOne({_id: Session.get("editingProduct")});
+    var productData = [currentProduct.name, currentProduct.description, currentProduct.price, currentProduct.link].join(",");
     $('.csvInputTextbox').val(productData);
     Session.set("editProduct", "");
 };
@@ -160,24 +197,41 @@ function csvToObject(data) {
         price: null,
         link: null,
         image: null,
-        model: null
+        model: null,
+        owner: null
     };
 
     if (parsedData.errors.length > 0) {
         alert("An error occured during import: " + parsedData.errors[0].join(','));
-    } else if (parsedData.data[0].length != _.keys(preparedObject).length) {
+        return null;
+    } else if (parsedData.data[0].length != 4) {
         alert(
             "Incorrect number of fields in string: " +
             parsedData.data[0].length + " instead of " +
             _.keys(preparedObject).length
         );
+        return null;
     } else {
         preparedObject.name = parsedData.data[0][0];
         preparedObject.description = parsedData.data[0][1];
-        preparedObject.price = parsedData.data[0][3];
-        preparedObject.link = parsedData.data[0][2];
-        preparedObject.image = parsedData.data[0][4];
-        preparedObject.model = parsedData.data[0][5];
+        preparedObject.price = parsedData.data[0][2];
+        preparedObject.link = parsedData.data[0][3];
+
+        //Preserve data from previous version
+        if (Products.findOne({_id: Session.get("editingProduct")}).image){
+            preparedObject.image = Products.findOne({_id: Session.get("editingProduct")}).image;
+        } else {
+            preparedObject.image = null;
+        }
+
+        if (Products.findOne({_id: Session.get("editingProduct")}).model){
+            preparedObject.model = Products.findOne({_id: Session.get("editingProduct")}).model;
+        } else {
+            preparedObject.model = null;
+        }
+        preparedObject.texture = null;
+        preparedObject.owner = Meteor.userId();
+
     }
     console.log(preparedObject);
     return preparedObject;

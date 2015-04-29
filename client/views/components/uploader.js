@@ -10,10 +10,11 @@ Template.uploader.events({
         function upload(file, metadata) {
             var newFile = new FS.File(file);
             newFile.metadata = metadata;
+            newFile.owner = Meteor.userId();
 
             // Inserted new doc with ID fileObj._id, and kicked off the data upload using HTTP
             Images.insert(newFile, function (err, fileObj) {
-                console.log("Uploaded file");
+                console.log("Uploaded file from owner: " + newFile.owner);
             });
         }
 

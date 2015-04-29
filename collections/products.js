@@ -1,9 +1,47 @@
 Products = new  Mongo.Collection("products");
 
-var modelStore = new FS.Store.GridFS('modelStore');
+var modelStore = new FS.Store.GridFS("modelStore", {
+});
 
-productModels = new FS.Collection('productModels', {
+var textureStore = new FS.Store.GridFS("textureStore");
+
+var prodThumbStore = new FS.Store.GridFS("prodThumbStore", {
+    transformWrite: function(fileObj, readStream, writeStream) {
+        gm(readStream, fileObj.name)
+            .resize(270,220,"^")
+            .gravity('Center')
+            .crop(270, 220)
+            .quality(100)
+            .autoOrient()
+            .stream()
+            .pipe(writeStream);
+    }
+});
+
+productModels = new FS.Collection("productModels", {
     stores: [modelStore]
+});
+
+productTextures = new FS.Collection("productTextures", {
+    stores: [textureStore]
+});
+
+productThumbs = new FS.Collection("productThumbs", {
+    stores: [prodThumbStore],
+    filter: {
+        maxSize: 10485760, //in bytes
+        allow: {
+            contentTypes: ['image/*'],
+            extensions: ['png', 'jpg', 'jpeg', 'gif']
+        },
+        onInvalid: function (message) {
+            if(Meteor.isClient){
+                alert(message);
+            }else{
+                console.warn(message);
+            }
+        }
+    }
 });
 
 productModels.allow({
@@ -21,37 +59,9 @@ productModels.allow({
     }
 });
 
-function addInitalData() {
-    if (Products.find().count() === 0) {
-        console.log("Adding inital data");
-
-        for (var i = 0; i < 10; i++) {
-            console.log(i + ' doc indexed');
-            brands = ["Sony", "Panasonic", "Apple", "Philips"];
-            names = ["10000", "a-tron", "Atomic", "Laserdisk", "Watch", "Blast", "Device"];
-            models = [];
-            Products.insert({
-                name: randElement(brands) + " " + randElement(models),
-                createdAt: new Date().getTime(),
-                description: "This text is now going to be very long.  Descriptive text goes here for product #" + i,
-                link: "http://www.google.com",
-                price: "10.99",
-                image: null,
-                model: randElement(models)
-            });
-        }
-
-        console.log('done!');
-    }
-}
-
-function randElement(arr){
-    return arr[Math.floor(Math.random() * arr.length)];
-}
-
 Products.search = function(query) {
     return Products.find({
-        name: { $regex: RegExp.escape(query), $options: 'i' }
+        name: { $regex: RegExp.escape(query), $options: "i" }
     }, {
         limit: 50
     });
@@ -62,7 +72,7 @@ if(Meteor.isServer){
         return Products.find();
     });
 
-    Meteor.publish('productSearch', function(query) {
+    Meteor.publish("productSearch", function(query) {
         check(query, String);
 
         if (_.isEmpty(query))
@@ -70,8 +80,6 @@ if(Meteor.isServer){
 
         return Products.search(query);
     });
-
-    addInitalData();
 
 }else{
     Meteor.subscribe("products");

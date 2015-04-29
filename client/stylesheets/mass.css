@@ -1,4 +1,4 @@
-body {
+#body {
     /*background-image: url("/images/triangle.png");*/
     /*background-size: cover;*/
     /*background-repeat: repeat-y;*/
@@ -19,9 +19,9 @@ img.selectedIMG{
 }
 
 .productImage {
-    width:auto;
-    max-width:100%;
-    height:auto;
+    width: 100%;
+    max-width: 100%;
+    height: auto;
 }
 
 .productDetail {
@@ -56,6 +56,7 @@ img.selectedIMG{
 
 .section {
     margin: 80px 0px 200px 0px;
+    margin-bottom: 55px;
 }
 
 .detectorCanvas {
@@ -138,146 +139,28 @@ img.selectedIMG{
     margin: auto;
 }
 
-.btn-breadcrumb .btn:not(:last-child):after {
-    content: " ";
-    display: block;
-    width: 0;
-    height: 0;
-    border-top: 17px solid transparent;
-    border-bottom: 17px solid transparent;
-    border-left: 10px solid white;
-    position: absolute;
-    top: 50%;
-    margin-top: -17px;
-    left: 100%;
-    z-index: 3;
-}
-.btn-breadcrumb .btn:not(:last-child):before {
-    content: " ";
-    display: block;
-    width: 0;
-    height: 0;
-    border-top: 17px solid transparent;
-    border-bottom: 17px solid transparent;
-    border-left: 10px solid rgb(173, 173, 173);
-    position: absolute;
-    top: 50%;
-    margin-top: -17px;
-    margin-left: 1px;
-    left: 100%;
-    z-index: 3;
-}
-
 .dashboard table {
     width: 100%;
     height: 100%;
 }
 
-.dashboard td {
+.dashboard #productName td {
     width: 33%
 }
-.dashupload {
-    float: right;
-    border-bottom: 0px;
-}
-.wizard a {
-    padding: 10px 12px 10px;
-    margin-right: 5px;
-    background: #efefef;
-    position: relative;
-    display: inline-block;
-}
-.wizard a:before {
-    width: 0;
-    height: 0;
-    border-top: 20px inset transparent;
-    border-bottom: 20px inset transparent;
-    border-left: 20px solid #fff;
-    position: absolute;
-    content: "";
-    top: 0;
-    left: 0;
-}
-.wizard a:after {
-    width: 0;
-    height: 0;
-    border-top: 20px inset transparent;
-    border-bottom: 20px inset transparent;
-    border-left: 20px solid #efefef;
-    position: absolute;
-    content: "";
-    top: 0;
-    right: -20px;
-    z-index: 2;
-}
-.wizard a:first-child:before,
-.wizard a:last-child:after {
-    border: none;
-}
-.wizard a:first-child {
-    -webkit-border-radius: 4px 0 0 4px;
-    -moz-border-radius: 4px 0 0 4px;
-    border-radius: 4px 0 0 4px;
-}
-.wizard a:last-child {
-    -webkit-border-radius: 0 4px 4px 0;
-    -moz-border-radius: 0 4px 4px 0;
-    border-radius: 0 4px 4px 0;
-}
-.wizard .badge {
-    margin: 0 5px 0 18px;
-    position: relative;
-    top: -1px;
-}
-.wizard a:first-child .badge {
-    margin-left: 0;
-}
-.wizard .current {
-    background: #007ACC;
-    color: #fff;
-}
-.wizard .current:after {
-    border-left-color: #007ACC;
+
+.footerLink {
+    width: 17%;
 }
 
+/*.dashboard .footerLink td {*/
+    /*float: right;*/
+    /*border-bottom: 0px;*/
+/*}*/
 
-/* ff anti-aliasing bug - http://coderwall.com/p/tpmsta */
-.mywizard li {
-    position: relative;
-    background: #f5f5f5;
-    padding-right: 30px;
-    padding-left: 5px;
+.trimmable {
+    white-space: nowrap;
+    width: 100%;                   /* IE6 needs any width */
+    overflow: hidden;              /* "overflow" value must be different from  visible"*/
+    -o-text-overflow: ellipsis;    /* Opera < 11*/
+    text-overflow:    ellipsis;    /* IE, Safari (WebKit), Opera >= 11, FF > 6 */
 }
-
-.mywizard li a:after, .mywizard li a:before {
-    left: 100%;
-    border: solid transparent;
-    content: " ";
-    height: 0;
-    width: 0;
-    position: absolute;
-    pointer-events: none;
-}
-
-.mywizard li a:after {
-    border-color: rgba(245, 245, 245, 0);
-    border-left-color: #f5f5f5;
-    border-width: 20px;
-    top: 50%;
-    margin-top: -20px;
-    margin-left: -30px;
-}
-
-.mywizard li a:before {
-    border-color: rgba(255, 255, 255, 0);
-    border-left-color: #fff;
-    border-width: 30px;
-    top: 50%;
-    margin-top: -30px;
-    margin-left: -30px;
-}
-.mywizard li .badge {
-    vertical-align: text-bottom;
-    padding-top: 3px;
-}
-

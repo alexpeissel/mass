@@ -24,40 +24,12 @@ var thumbnailStore = new FS.Store.GridFS("thumbnail", {
     }
 });
 
-//Create a product image store
-var productStore = new FS.Store.GridFS("product", {
-    transformWrite: function(fileObj, readStream, writeStream) {
-        gm(readStream, fileObj.name)
-            .resize(270,220,"^")
-            .gravity('Center')
-            .crop(270, 220)
-            .quality(100)
-            .autoOrient()
-            .stream()
-            .pipe(writeStream);
-    }
-});
-
-//Create a product image store
-var productThumbStore = new FS.Store.GridFS("productThumb", {
-    transformWrite: function(fileObj, readStream, writeStream) {
-        gm(readStream, fileObj.name)
-            .resize(30,30,"^")
-            .gravity('Center')
-            .crop(30, 30)
-            .quality(100)
-            .autoOrient()
-            .stream()
-            .pipe(writeStream);
-    }
-});
-
 //Create the master store
 var masterStore = new FS.Store.GridFS("master");
 
 //Create globally scoped Images collection.
 Images = new FS.Collection("images", {
-    stores: [thumbnailStore, masterStore, productStore],
+    stores: [thumbnailStore, masterStore],
     filter: {
         maxSize: 10485760, //in bytes
         allow: {

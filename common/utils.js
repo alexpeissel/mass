@@ -10,3 +10,15 @@ renderTemplate = function (template, data) {
     UI.renderWithData(template, data, node);
     return node;
 };
+
+shorten = function (data, length, preserveLength) {
+    var defaultLength = 10;
+    var defaultPreserved = 4;
+
+    stringLength = length < defaultLength ? length : defaultLength;
+    stringPreserved = preserveLength < defaultPreserved ? preserveLength : defaultPreserved;
+
+    var stringEnd = data.substring(data.length - stringPreserved);
+    var trimmedString = data.substring(0, stringLength)+ "... " + stringEnd;
+    return trimmedString;
+};

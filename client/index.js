@@ -1,8 +1,4 @@
 if (Meteor.isClient) {
-
-}
-
-if (Meteor.isServer) {
     Meteor.startup(function () {
         sAlert.config({
             effect: 'scale',
@@ -10,8 +6,5 @@ if (Meteor.isServer) {
             timeout: 5000
         });
     });
-
-    Meteor.methods({
-        // methods go here
-    });
 }
+

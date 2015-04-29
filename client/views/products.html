@@ -21,6 +21,7 @@
                     </div>
                 </div>
             </div>
+            <hr>
             {{#if searchResults.count}}
                 {{#each searchResults}}
                     {{> product}}
@@ -45,7 +46,7 @@
     <div class="col-xs-6 col-sm-3">
         <div class="productTile">
             <div class="productImageContainer">
-                <img class="productImage" src="/images/placeholder.gif">
+                <img class="productImage" src="{{thumbURL this._id}}">
             </div>
             <div class="productDetail">
                 <div class="productTitle">
