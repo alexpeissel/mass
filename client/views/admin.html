@@ -100,6 +100,7 @@
 <template name="csvInput">
     <div class="alert alert-info" role="alert">
         <p>The format for adding new products is as follows:</p>
+
         <p><strong>name,description,price,link</strong></p>
     </div>
     <textarea class="csvInputTextbox" cols="30" rows="10" style="width: 100%;"></textarea>
@@ -108,22 +109,22 @@
 
 <template name="productUpload">
     <h3>Product import/export</h3>
-
     <div class="alert alert-info" role="alert">...</div>
-
     <span class="btn btn-default btn-file">
-    Browse <input class="productImporter" type="file">
-</span>
+        <input class="productImporter" type="file">
+    </span>
+    <a href="/zip" class="btn btn-info" role="button">
+        <span class="glyphicon glyphicon-download-alt"></span> Download CSV
+    </a>
 
 </template>
 
 <template name="imageUpload">
     <div class="alert alert-info" role="alert">
         <p>These images are used to populate the products page.</p>
-
         <p>Accepted formats: <strong>.jpeg (.jpg or .jpeg), .png, .gif, .tiff</strong></p>
     </div>
-    Browse <input class="imageUploadForm" type="file">
+    <input class="imageUploadForm" type="file">
 
 </template>
 
@@ -132,7 +133,7 @@
     <h3>Upload branding images</h3>
 
     <div class="alert alert-info" role="alert">...</div>
-    Browse <input class="brandUploadForm" type="file">
+    <input class="brandUploadForm" type="file">
 
 </template>
 

@@ -63,12 +63,25 @@ Router.map(function() {
             // Create zip
             var zip = new JSZip();
 
+            var productList = Products.find().fetch();
+            var header = ["name", "description", "price", "link"];
+            var exportData = header;
+
+            for (var i =0; i < productList.length; i++){
+
+                    var row = [
+                        productList[i].name,
+                        productList[i].description,
+                        productList[i].price,
+                        productList[i].link
+                    ];
+                exportData += ("\n" + row);
+            }
+
             // Add a file to the zip
-            var filename = "export" + new Date();
-            var exportData = "hello";
+            var filename = "export_" + new Date() + ".txt";
 
-
-            zip.file("filename", exportData);
+            zip.file("export_" + new Date() + ".txt", exportData);
 
             // Generate zip stream
             var output = zip.generate({

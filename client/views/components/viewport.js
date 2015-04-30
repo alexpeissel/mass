@@ -12,7 +12,6 @@ Template.viewport.rendered = function () {
     var imageUrl = Images.findOne({_id: Session.get("currentImage")}).url({store: 'master'});
 
     var modelId = Products.findOne({_id: Session.get("currentProduct")}).model._id;
-    alert(modelId);
     var modelURL = productModels.findOne({_id: modelId}).url();
 
     var position = Images.findOne({_id: Session.get("currentImage")}).metadata;

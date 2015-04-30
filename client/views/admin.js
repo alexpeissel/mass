@@ -27,7 +27,12 @@ Template.productDashboard.helpers({
 
 Template.productDashboard.events({
     "click .edit": function () {
-        Session.set("editingProduct", this._id);
+
+        if (this._id) {
+            Session.set("editingProduct", this._id);
+        } else {
+            Session.set("editingProduct", "new");
+        }
 
         bootbox.dialog({
             title: 'Add data in CSV format',
@@ -37,7 +42,7 @@ Template.productDashboard.events({
                     label: "Close",
                     className: "btn btn-primary",
                     callback: function () {
-                        //take some actions
+                        return true;
                     }
                 },
 
@@ -45,11 +50,13 @@ Template.productDashboard.events({
                     label: "Submit",
                     className: "btn btn-primary",
                     callback: function () {
-                        var converted = csvToObject($('.csvInputTextbox').val());
+                        var raw = $(".csvInputTextbox").val();
+                        var converted = csvToObject(raw);
+
                         if (!converted) {
                             return false;
                         } else {
-                            if (Session.get("editingProduct")) {
+                            if (!Session.equals("editingProduct", "new")) {
                                 bootbox.confirm(
                                     "Change product to attributes: " +
                                     "name: \"" + converted.name +
@@ -145,7 +152,7 @@ Template.productDashboard.events({
 Template.csvInput.rendered = function () {
     var productData;
 
-    if (!Session.get("editingProduct")) {
+    if (!Session.equals("editingProduct", "new")) {
         var currentProduct = Products.findOne({_id: Session.get("editingProduct")});
         productData = [currentProduct.name, currentProduct.description, currentProduct.price, currentProduct.link].join(",");
     } else {
@@ -164,24 +171,6 @@ Template.imageUpload.events({
         var fileObj = productThumbs.insert(file);
         currentProduct.image = fileObj;
 
-        Products.update({_id: currentProduct._id}, currentProduct);
-
-    }
-});
-
-Template.textureUpload.events({
-    'change .textureUploadForm': function () {
-        var currentProduct = Products.findOne({_id: Session.get("editingProduct")});
-        var fileList = $('.textureUploadForm').get(0).files;
-
-        var texturePack = [];
-
-        for (var i = 0; i < fileList.length; i++) {
-            var fileObj = productTextures.insert(fileList[i]);
-            texturePack.push(fileObj);
-        }
-
-        currentProduct.textures = texturePack;
         Products.update({_id: currentProduct._id}, currentProduct);
 
     }
@@ -228,18 +217,18 @@ function csvToObject(data) {
         preparedObject.link = parsedData.data[0][3];
 
         //Preserve data from previous version
-        if (Products.findOne({_id: Session.get("editingProduct")}).image) {
+        if (!Session.equals("editingProduct", "new")) {
             preparedObject.image = Products.findOne({_id: Session.get("editingProduct")}).image;
-        } else {
-            preparedObject.image = null;
         }
 
-        if (Products.findOne({_id: Session.get("editingProduct")}).model) {
+        if (!Session.equals("editingProduct", "new")) {
             preparedObject.model = Products.findOne({_id: Session.get("editingProduct")}).model;
-        } else {
-            preparedObject.model = null;
         }
-        preparedObject.textures = null;
+
+        if (!Session.equals("editingProduct", "new")) {
+            preparedObject.textures = Products.findOne({_id: Session.get("editingProduct")}).textures;
+        }
+
         preparedObject.owner = Meteor.userId();
 
     }

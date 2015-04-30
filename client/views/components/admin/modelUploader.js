@@ -40,6 +40,9 @@ Template.modelUploader.events({
                 reader.onload = function (e) {
                     var content = e.target.result;
 
+                    //kept outside the loop to persist changes
+                    var processed = content;
+
                     for (var k = 0; k < textures.length; k++) {
                         console.log(textures);
                         console.log("Texture available: " + textures[k].original.name);
@@ -51,23 +54,17 @@ Template.modelUploader.events({
                             console.log("Setting " + textures[k].original.name + " to " + textures[k]._id);
 
                             var idString = ": \"" + textures[k]._id;
-                            var processed = content.replace(/: ".*jpg|jpeg|png"/i, idString);
-                            //alert(processed.split(/\r\n|\r|\n/).length);
-                            console.log(processed);
-
-                            var updatedModel = new Blob([processed], {type: "application/x-javascript"});
-                            updatedModel.lastModifiedDate = new Date();
-                            updatedModel.name = "test.js";
-
-                            var fileObj = productModels.insert(updatedModel);
-                            currentProduct.model = fileObj;
-                            console.log(currentProduct.model);
-                            Products.update({_id: currentProduct._id}, {$set: {model: fileObj}});
-                            //Products.insert({_id: currentProduct._id}, currentProduct);
-
+                            processed = processed.replace(/: ".*jpg|jpeg|png"/i, idString);
                         }
-
                     }
+                    var updatedModel = new Blob([processed], {type: "application/x-javascript"});
+                    updatedModel.lastModifiedDate = new Date();
+                    updatedModel.name = "test.js";
+
+                    var fileObj = productModels.insert(updatedModel);
+                    currentProduct.model = fileObj;
+                    Products.update({_id: currentProduct._id}, {$set: {model: fileObj}});
+
                 };
                 reader.readAsText(model);
             } else {
