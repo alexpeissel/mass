@@ -9,14 +9,12 @@ Template.viewport.rendered = function () {
 
     var fps = 30;
 
-    //Load image (requires DB integration - pass in imageID as parameter and load?)
     var image = new Image();
 
     var imageUrl = Images.findOne({_id: Session.get("currentImage")}).url({store: 'master'});
 
     var modelId = Products.findOne({_id: Session.get("currentProduct")}).model._id;
     var modelURL = productModels.findOne({_id: modelId}).url();
-
 
     var position = Images.findOne({_id: Session.get("currentImage")}).metadata;
 
@@ -65,7 +63,7 @@ Template.viewport.rendered = function () {
         //Instantiate a loader
         var loader = new THREE.JSONLoader();
 
-        loader.load(url, loadModelCallback);
+        loader.load(url, loadModelCallback, "http://localhost:3000/cfs/files/productTextures/");
 
         if (boxed) {
             //hot cube action
@@ -83,14 +81,20 @@ Template.viewport.rendered = function () {
 
     };
 
-    function loadModelCallback(geometry, material) {
+    function loadModelCallback(geometry, materials) {
 
-        material = new THREE.MeshBasicMaterial(
-            {
-                map: THREE.ImageUtils.loadTexture("/models/dog.jpg"),
-                depthTest: false,
-                depthWrite: false
-            }),
+        //material = new THREE.MeshBasicMaterial(
+        //    {
+        //        map: THREE.ImageUtils.loadTexture("/models/dog.jpg"),
+        //        depthTest: false,
+        //        depthWrite: false
+        //    }),
+        //material = new THREE.MeshNormalMaterial({
+        //    map: THREE.ImageUtils.loadTexture("/models/dog.jpg")
+        //}),
+
+        console.log(materials);
+        material = new THREE.MeshFaceMaterial(materials),
             mesh = new THREE.Mesh(
                 geometry,
                 material

@@ -130,6 +130,25 @@ Template.productDashboard.events({
             }
         });
 
+    },
+
+    "click .textureUpload": function () {
+        Session.set("editingProduct", this._id);
+
+        bootbox.dialog({
+            title: "Upload product image",
+            message: renderTemplate(Template.textureUpload),
+            buttons: {
+                delete: {
+                    label: "<span class=\"glyphicon glyphicon-remove\"></span> Delete",
+                    className: "btn btn-danger",
+                    callback: function () {
+
+                    }
+                }
+            }
+        });
+
     }
 });
 
@@ -155,6 +174,24 @@ Template.imageUpload.events({
 
         currentProduct.image = fileObj;
 
+        Products.update({_id: currentProduct._id}, currentProduct);
+
+    }
+});
+
+Template.textureUpload.events({
+    'change .textureUploadForm': function () {
+        var currentProduct = Products.findOne({_id: Session.get("editingProduct")});
+        var fileList = $('.textureUploadForm').get(0).files;
+
+        var texturePack = [];
+
+        for (var i = 0; i < fileList.length; i++) {
+            var fileObj = productTextures.insert(fileList[i]);
+            texturePack.push(fileObj);
+        }
+
+        currentProduct.textures = texturePack;
         Products.update({_id: currentProduct._id}, currentProduct);
 
     }
@@ -218,13 +255,13 @@ function csvToObject(data) {
         preparedObject.link = parsedData.data[0][3];
 
         //Preserve data from previous version
-        if (Products.findOne({_id: Session.get("editingProduct")}).image){
+        if (Products.findOne({_id: Session.get("editingProduct")}).image) {
             preparedObject.image = Products.findOne({_id: Session.get("editingProduct")}).image;
         } else {
             preparedObject.image = null;
         }
 
-        if (Products.findOne({_id: Session.get("editingProduct")}).model){
+        if (Products.findOne({_id: Session.get("editingProduct")}).model) {
             preparedObject.model = Products.findOne({_id: Session.get("editingProduct")}).model;
         } else {
             preparedObject.model = null;

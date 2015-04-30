@@ -4,8 +4,12 @@
             <div class="dashboard">
                 <table border="0">
                     <tr>
-                        <td>Selected product: <strong>{{currentProduct}}</strong></td>
-                        <td class="footerLink"><a class="clearProduct" href="#">Clear</a></td>
+                        <td>
+                            Product: <strong>{{currentProduct}}</strong>
+                            <a href="#" class="btn btn-danger btn-xs clearProduct" role="button">
+                                <span class="glyphicon glyphicon-remove"></span>
+                            </a>
+                        </td>
                         <td class="dashupload">{{> uploader}}</td>
                     </tr>
                 </table>

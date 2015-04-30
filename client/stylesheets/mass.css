@@ -4,18 +4,13 @@
     /*background-repeat: repeat-y;*/
 }
 
-img.selectedIMG{
-    border: 2px solid blue;
-}
-
 .productTile {
     padding: 5px;
-    margin: 10px 2px 30px 2px;
+    margin: 2px 2px 60px 2px;
     background-color:#f9f9f9;
     border: 2px solid #f9f9f9;
     height: 400px;
     position: relative
-
 }
 
 .productImage {
@@ -47,6 +42,7 @@ img.selectedIMG{
     position: absolute;
     bottom: 0;
 }
+
 
 .navbar .brand {
     max-width:45px;
@@ -151,11 +147,6 @@ img.selectedIMG{
 .footerLink {
     width: 17%;
 }
-
-/*.dashboard .footerLink td {*/
-    /*float: right;*/
-    /*border-bottom: 0px;*/
-/*}*/
 
 .trimmable {
     white-space: nowrap;

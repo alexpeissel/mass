@@ -11,7 +11,11 @@ Template.photoTile.events({
         var available = Session.get("currentProduct") ? "" : " disabled";
 
         if (!Session.get("currentProduct")) {
-            alert("no prod");
+            sAlert.error("Select a product so you can view it!", {
+                effect: 'scale',
+                position: 'bottom-right',
+                timeout: '5000'
+            });
         } else {
             var currentProductName = Products.findOne({_id: Session.get("currentProduct")}).name;
 
