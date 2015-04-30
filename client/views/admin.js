@@ -99,7 +99,7 @@ Template.productDashboard.events({
 
         bootbox.dialog({
             title: "Upload model",
-            message: renderTemplate(Template.modelUpload),
+            message: renderTemplate(Template.modelUploader),
             buttons: {
                 delete: {
                     label: "<span class=\"glyphicon glyphicon-remove\"></span> Delete",
@@ -143,8 +143,15 @@ Template.productDashboard.events({
 });
 
 Template.csvInput.rendered = function () {
-    var currentProduct = Products.findOne({_id: Session.get("editingProduct")});
-    var productData = [currentProduct.name, currentProduct.description, currentProduct.price, currentProduct.link].join(",");
+    var productData;
+
+    if (!Session.get("editingProduct")) {
+        var currentProduct = Products.findOne({_id: Session.get("editingProduct")});
+        productData = [currentProduct.name, currentProduct.description, currentProduct.price, currentProduct.link].join(",");
+    } else {
+        productData = ["name", "description", "price", "link"].join(",")
+    }
+
     $('.csvInputTextbox').val(productData);
     Session.set("editProduct", "");
 };
@@ -232,7 +239,7 @@ function csvToObject(data) {
         } else {
             preparedObject.model = null;
         }
-        preparedObject.texture = null;
+        preparedObject.textures = null;
         preparedObject.owner = Meteor.userId();
 
     }
@@ -240,77 +247,3 @@ function csvToObject(data) {
     return preparedObject;
 }
 
-Template.modelUpload.events({
-    'change .modelUploadForm': function () {
-
-        var currentProduct = Products.findOne({_id: Session.get("editingProduct")});
-        var fileList = $('.modelUploadForm').get(0).files;
-
-        var imageExtensions = [".jpg", ".jpeg", ".png"];
-        var modelExtensions = [".js"];
-
-        var textures = [];
-        var model;
-
-        for (var i = 0; i < fileList.length; i++) {
-            var extension = fileList[i].name.substring(fileList[i].name.lastIndexOf('.'));
-
-            if (imageExtensions.indexOf(extension) >= 0) {
-                textures.push(fileList[i]);
-            } else if (modelExtensions.indexOf(extension) >= 0) {
-                model = fileList[i];
-            }
-        }
-
-        console.log(model);
-
-        if (textures.length >= 1) {
-            for (var j = 0; j < textures.length; j++) {
-                var fileObj = productTextures.insert(textures[j]);
-                textures[j] = fileObj;
-            }
-        }
-
-        currentProduct.textures = textures;
-        console.log(model);
-
-        if (model) {
-            if (textures.length >= 1) {
-                var reader = new FileReader();
-                reader.onload = function (e) {
-                    var content = e.target.result;
-
-                    for (var k = 0; k < textures.length; k++) {
-                        console.log(textures);
-                        console.log("Texture available: " + textures[k].original.name);
-
-                        if (content.search(textures[k].original.name) <= 0) {
-                            console.log("No reference found");
-                        } else {
-                            console.log("Found texture referance at: " + content.search(textures[k].original.name));
-                            console.log("Setting " + textures[k].original.name + " to " + textures[k]._id);
-
-                            var idString = ": \"" + textures[k]._id;
-                            var processed = content.replace(/: ".*jpg|jpeg|png"/i, idString);
-
-                            var updatedModel = new Blob([processed], {type: "text/plain"});
-                            updatedModel.lastModifiedDate = new Date();
-                            updatedModel.name = "dog.js";
-
-                            var fileObj = productTextures.insert(updatedModel);
-                            currentProduct.model = fileObj;
-                            Products.update({_id: currentProduct._id}, currentProduct);
-                        }
-
-                    }
-                };
-                reader.readAsText(model);
-            } else {
-                currentProduct.model = model;
-                Products.update({_id: currentProduct._id}, currentProduct);
-            }
-        } else {
-            console.log("No bleedin' model!")
-        }
-    }
-});
