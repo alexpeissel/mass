@@ -3,7 +3,7 @@
  */
 
 Router.route("/", function () {
-    this.render("home");
+    this.render("productsPage");
 });
 
 Router.route("/gallery", function () {
@@ -49,7 +49,7 @@ Router.route("/admin", function () {
         this.render("adminPage");
     } else {
         Session.set("unauthorized", true);
-        this.render("home");
+        this.render("galleryPage");
     }
 });
 
@@ -64,7 +64,11 @@ Router.map(function() {
             var zip = new JSZip();
 
             // Add a file to the zip
-            zip.file('textfile.txt', 'Hello World');
+            var filename = "export" + new Date();
+            var exportData = "hello";
+
+
+            zip.file("filename", exportData);
 
             // Generate zip stream
             var output = zip.generate({

@@ -9,8 +9,6 @@ Template.viewport.rendered = function () {
 
     var fps = 30;
 
-    var image = new Image();
-
     var imageUrl = Images.findOne({_id: Session.get("currentImage")}).url({store: 'master'});
 
     var modelId = Products.findOne({_id: Session.get("currentProduct")}).model._id;
@@ -18,6 +16,7 @@ Template.viewport.rendered = function () {
 
     var position = Images.findOne({_id: Session.get("currentImage")}).metadata;
 
+    var image = new Image();
     console.log("Using " + imageUrl);
     console.log("Found positions at " + position);
     image.src = imageUrl;
@@ -32,7 +31,6 @@ Template.viewport.rendered = function () {
         renderer = new THREE.WebGLRenderer({canvas: canvas, antialias: true, preserveDrawingBuffer: true});
         renderer.setSize(canvas.width, canvas.height);
         renderer.autoClear = false;
-        //renderer.setClearColor(0x000044);
 
         //Set up cameras
         camera = new THREE.PerspectiveCamera(60, canvas.width / canvas.height, 1, 10000);
@@ -89,9 +87,7 @@ Template.viewport.rendered = function () {
         //        depthTest: false,
         //        depthWrite: false
         //    }),
-        //material = new THREE.MeshNormalMaterial({
-        //    map: THREE.ImageUtils.loadTexture("/models/dog.jpg")
-        //}),
+
 
         console.log(materials);
         material = new THREE.MeshFaceMaterial(materials),
@@ -103,8 +99,6 @@ Template.viewport.rendered = function () {
         mesh.receiveShadow = true;
         mesh.castShadow = true;
 
-        //mesh = new THREE.Object3D();
-        //mesh.add(object);
         updateModelPosition(mesh);
         scene.add(mesh);
     }
@@ -201,40 +195,3 @@ Template.viewport.rendered = function () {
     }
 
 };
-
-Template.orienter.events({
-    "click .capture": function () {
-
-        //if (window.DeviceMotionEvent != undefined) {
-        //
-        //    function sample() {
-        //        var acceleration;
-        //        window.ondevicemotion = function (e) {
-        //
-        //            acceleration = {
-        //                x: event.accelerationIncludingGravity.x,
-        //                y: event.accelerationIncludingGravity.y,
-        //                z: event.accelerationIncludingGravity.z
-        //            }
-        //        };
-        //        return acceleration;
-        //    }
-        //
-        //    function scan(data) {
-        //        if (data.x > 8) {
-        //            alert("derp");
-        //        }
-        //    }
-        //
-        //    setInterval(alert("hello"), 1000);
-        //
-        //    document.getElementById("orientationView").innerHTML =
-        //        acceleration.x.toString() + " "
-        //        + acceleration.y.toString() + " "
-        //        + acceleration.z.toString();
-        //
-        //} else {
-        //    alert("No detection capability found");
-        //}
-    }
-});

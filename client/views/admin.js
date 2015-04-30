@@ -124,26 +124,16 @@ Template.productDashboard.events({
                     label: "<span class=\"glyphicon glyphicon-remove\"></span> Delete",
                     className: "btn btn-danger",
                     callback: function () {
-
+                        var currentProductImage = Products.findOne({_id: editingProduct}).image._id;
+                        prodThumbStore.remove({_id: editingProduct}, currentProductImage);
                     }
-                }
-            }
-        });
+                },
 
-    },
-
-    "click .textureUpload": function () {
-        Session.set("editingProduct", this._id);
-
-        bootbox.dialog({
-            title: "Upload product image",
-            message: renderTemplate(Template.textureUpload),
-            buttons: {
-                delete: {
-                    label: "<span class=\"glyphicon glyphicon-remove\"></span> Delete",
-                    className: "btn btn-danger",
+                close: {
+                    label: "Close",
+                    className: "btn btn-default",
                     callback: function () {
-
+                        return true;
                     }
                 }
             }
@@ -152,26 +142,19 @@ Template.productDashboard.events({
     }
 });
 
-Template.modelUpload.events({
-    'change .modelUploadForm': function () {
-
-        var currentProduct = Products.findOne({_id: Session.get("editingProduct")});
-        var file = $('.modelUploadForm').get(0).files[0];
-        var fileObj = productModels.insert(file);
-
-        currentProduct.model = fileObj;
-
-        Products.update({_id: currentProduct._id}, currentProduct);
-
-    }
-});
+Template.csvInput.rendered = function () {
+    var currentProduct = Products.findOne({_id: Session.get("editingProduct")});
+    var productData = [currentProduct.name, currentProduct.description, currentProduct.price, currentProduct.link].join(",");
+    $('.csvInputTextbox').val(productData);
+    Session.set("editProduct", "");
+};
 
 Template.imageUpload.events({
     'change .imageUploadForm': function () {
         var currentProduct = Products.findOne({_id: Session.get("editingProduct")});
         var file = $('.imageUploadForm').get(0).files[0];
-        var fileObj = productThumbs.insert(file);
 
+        var fileObj = productThumbs.insert(file);
         currentProduct.image = fileObj;
 
         Products.update({_id: currentProduct._id}, currentProduct);
@@ -196,23 +179,6 @@ Template.textureUpload.events({
 
     }
 });
-
-Template.csvInput.helpers({
-    csvPlaceholder: function () {
-        // Slice removes _id field
-        var keys = Object.keys(Products.findOne({})).slice(1);
-        return keys.join(', ');
-
-    }
-});
-
-Template.csvInput.rendered = function () {
-    //var productData = _.values(Products.findOne({_id: Session.get("editingProduct")}, {fields: {'createdAt': 0}})).slice(1).join(",");
-    var currentProduct = Products.findOne({_id: Session.get("editingProduct")});
-    var productData = [currentProduct.name, currentProduct.description, currentProduct.price, currentProduct.link].join(",");
-    $('.csvInputTextbox').val(productData);
-    Session.set("editProduct", "");
-};
 
 //Template.productImport.events({
 //    'change .productImporter': function (event, template) {
@@ -274,3 +240,77 @@ function csvToObject(data) {
     return preparedObject;
 }
 
+Template.modelUpload.events({
+    'change .modelUploadForm': function () {
+
+        var currentProduct = Products.findOne({_id: Session.get("editingProduct")});
+        var fileList = $('.modelUploadForm').get(0).files;
+
+        var imageExtensions = [".jpg", ".jpeg", ".png"];
+        var modelExtensions = [".js"];
+
+        var textures = [];
+        var model;
+
+        for (var i = 0; i < fileList.length; i++) {
+            var extension = fileList[i].name.substring(fileList[i].name.lastIndexOf('.'));
+
+            if (imageExtensions.indexOf(extension) >= 0) {
+                textures.push(fileList[i]);
+            } else if (modelExtensions.indexOf(extension) >= 0) {
+                model = fileList[i];
+            }
+        }
+
+        console.log(model);
+
+        if (textures.length >= 1) {
+            for (var j = 0; j < textures.length; j++) {
+                var fileObj = productTextures.insert(textures[j]);
+                textures[j] = fileObj;
+            }
+        }
+
+        currentProduct.textures = textures;
+        console.log(model);
+
+        if (model) {
+            if (textures.length >= 1) {
+                var reader = new FileReader();
+                reader.onload = function (e) {
+                    var content = e.target.result;
+
+                    for (var k = 0; k < textures.length; k++) {
+                        console.log(textures);
+                        console.log("Texture available: " + textures[k].original.name);
+
+                        if (content.search(textures[k].original.name) <= 0) {
+                            console.log("No reference found");
+                        } else {
+                            console.log("Found texture referance at: " + content.search(textures[k].original.name));
+                            console.log("Setting " + textures[k].original.name + " to " + textures[k]._id);
+
+                            var idString = ": \"" + textures[k]._id;
+                            var processed = content.replace(/: ".*jpg|jpeg|png"/i, idString);
+
+                            var updatedModel = new Blob([processed], {type: "text/plain"});
+                            updatedModel.lastModifiedDate = new Date();
+                            updatedModel.name = "dog.js";
+
+                            var fileObj = productTextures.insert(updatedModel);
+                            currentProduct.model = fileObj;
+                            Products.update({_id: currentProduct._id}, currentProduct);
+                        }
+
+                    }
+                };
+                reader.readAsText(model);
+            } else {
+                currentProduct.model = model;
+                Products.update({_id: currentProduct._id}, currentProduct);
+            }
+        } else {
+            console.log("No bleedin' model!")
+        }
+    }
+});
