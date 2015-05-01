@@ -41,19 +41,19 @@ Template.photoTile.events({
                         }
                     },
 
-                    save: {
-                        label: "<span class=\"glyphicon glyphicon-download-alt\"></span> Save",
-                        className: "btn btn-primary disabled",
-                        callback: function () {
-                            var canvas = document.getElementById('viewportCanvas');
-                            data = canvas.toDataURL();
-                            window.location = data;
-
-                            //Prevents dialog from closing
-                            return false;
-
-                        }
-                    },
+                    //save: {
+                    //    label: "<span class=\"glyphicon glyphicon-download-alt\"></span> Save",
+                    //    className: "btn btn-primary disabled",
+                    //    callback: function () {
+                    //        var canvas = document.getElementById('viewportCanvas');
+                    //        data = canvas.toDataURL();
+                    //        window.location = data;
+                    //
+                    //        //Prevents dialog from closing
+                    //        return false;
+                    //
+                    //    }
+                    //},
 
                     close: {
                         label: "Close",

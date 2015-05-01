@@ -23,11 +23,6 @@ if (Meteor.isClient) {
     Template.footer.events({
         "click .clearProduct": function() {
                 Session.set("currentProduct", "");
-        },
-
-        "click .dashupload": function() {
-            alert("clicked");
-            $(".uploader").trigger("change");
         }
     });
 }

@@ -108,11 +108,11 @@ Template.productDashboard.events({
             title: "Upload model",
             message: renderTemplate(Template.modelUploader),
             buttons: {
-                delete: {
-                    label: "<span class=\"glyphicon glyphicon-remove\"></span> Delete",
-                    className: "btn btn-danger",
+                close: {
+                    label: "Close",
+                    className: "btn btn-default",
                     callback: function () {
-
+                        return true;
                     }
                 }
             }
@@ -127,15 +127,6 @@ Template.productDashboard.events({
             title: "Upload product image",
             message: renderTemplate(Template.imageUpload),
             buttons: {
-                delete: {
-                    label: "<span class=\"glyphicon glyphicon-remove\"></span> Delete",
-                    className: "btn btn-danger",
-                    callback: function () {
-                        var currentProductImage = Products.findOne({_id: editingProduct}).image._id;
-                        prodThumbStore.remove({_id: editingProduct}, currentProductImage);
-                    }
-                },
-
                 close: {
                     label: "Close",
                     className: "btn btn-default",

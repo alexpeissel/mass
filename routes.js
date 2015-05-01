@@ -79,7 +79,7 @@ Router.map(function() {
             }
 
             // Add a file to the zip
-            var filename = "export_" + new Date().valueOf() + ".txt";
+            var filename = "export_" + new Date().getTime() + ".txt";
 
             zip.file("export_" + new Date() + ".txt", exportData);
 
