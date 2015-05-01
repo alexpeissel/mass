@@ -22,36 +22,52 @@ function addInitalProducts() {
             description: "Separate shelf for magazines, etc. helps you keep your things organised and the table top clear.",
             link: "http://www.ikea.com/gb/en/catalog/products/80111339/",
             price: "16",
-            image: "/inital/lack/lack.jpg",
-            model: "/inital/lack/lack.js",
-            textures: []
-        },
-
-        {
-            name: "Apple iMac (2006)",
-            createdAt: new Date().getTime(),
-            description: "",
-            link: "http://www.ikea.com/gb/en/catalog/products/80111339/",
-            price: "16",
-            image: "/inital/lack/lack.jpg",
-            model: "/inital/lack/lack.js",
-            textures: []
-        },
-
-        {
-            name: "Ikea Lack",
-            createdAt: new Date().getTime(),
-            description: "Separate shelf for magazines, etc. helps you keep your things organised and the table top clear.",
-            link: "http://www.ikea.com/gb/en/catalog/products/80111339/",
-            price: "16",
-            image: "/inital/lack/lack.jpg",
-            model: "/inital/lack/lack.js",
+            image: "http://localhost:8000/inital/lack/lack.jpg",
+            model: "http://localhost:8000/inital/lack/model/lack.js",
             textures: []
         }
 
+        //{
+        //    name: "Apple iMac (2006)",
+        //    createdAt: new Date().getTime(),
+        //    description: "",
+        //    link: "http://www.ikea.com/gb/en/catalog/products/80111339/",
+        //    price: "16",
+        //    image: "/inital/lack/lack.jpg",
+        //    model: "/inital/lack/lack.js",
+        //    textures: []
+        //},
+        //
+        //{
+        //    name: "Ikea Lack",
+        //    createdAt: new Date().getTime(),
+        //    description: "Separate shelf for magazines, etc. helps you keep your things organised and the table top clear.",
+        //    link: "http://www.ikea.com/gb/en/catalog/products/80111339/",
+        //    price: "16",
+        //    image: "/inital/lack/lack.jpg",
+        //    model: "/inital/lack/lack.js",
+        //    textures: []
+        //}
+
     ];
 
-    for (var i = 0; i < 10; i++) {
+    //_.each(products, function(product) {
+    //    console.log("Adding:" +  product.name);
+    //
+    //    Products.insert(product);
+    //    var imageUrl = product.image;
+    //    Products.update({_id: product.id}, {image: productThumbs.insert(imageUrl)});
+            //productThumbs.insert(product.image),
+            //productModels.insert(product.model),
+            //product.textures
+
+        //product.model = ;
+        //product.textures = _.each(product.textures, function(texture) {
+        //    productTextures.insert(texture);
+        //});
+    //});
+
+    for (var i = 0; i < 4; i++) {
         console.log(i + " product generated");
         brands = ["Sony", "Panasonic", "Apple", "Philips"];
         names = ["10000", "a-tron", "Atomic", "Laserdisk", "Watch", "Blast", "Device"];

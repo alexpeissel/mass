@@ -65,6 +65,12 @@ Template.modelUploader.events({
                     currentProduct.model = fileObj;
                     Products.update({_id: currentProduct._id}, {$set: {model: fileObj}});
 
+                    //Set model name at the blob encoding seems to loose it
+                    var namedModel = Products.findOne({_id: currentProduct._id}).model;
+                    namedModel.original.name = model.name;
+                    Products.update({_id: currentProduct._id}, {$set: {model: namedModel}})
+
+
                 };
                 reader.readAsText(model);
             } else {

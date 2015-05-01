@@ -114,7 +114,7 @@ Template.images.helpers({
 
 Template.galleryPage.rendered = function () {
     if (Session.get("changedProduct")) {
-        sAlert.success(Products.findOne({_id: Session.get("currentProduct")}).name + " is ready to view!  Select an image to see the composed result.", {
+        sAlert.success(Products.findOne({_id: Session.get("currentProduct")}).name + " is ready to view!  Select an image to see the composited result.", {
             effect: 'scale',
             position: 'bottom-right',
             timeout: '5000'
