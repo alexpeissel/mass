@@ -176,16 +176,44 @@ Template.imageUpload.events({
     }
 });
 
-//Template.productImport.events({
-//    'change .productImporter': function (event, template) {
-//        var file = $('.productImporter').get(0).files[0];
-//        var fileObj = Models.insert(file);
-//        Products.insert({
-//            name: "test",
-//            model: fileObj
-//        });
-//    }
-//});
+Template.productUpload.events({
+    'change .productImporter': function () {
+        var file = $('.productImporter').get(0).files[0];
+
+        Papa.parse(file, {
+            complete: function(results) {
+                console.log(results);
+
+                function PreparedObject(name, description, price, link, image, model, owner) {
+                    this.name = name,
+                        this.description = description,
+                    this.price = price,
+                    this.link = link,
+                    this.image = image,
+                    this.model = model,
+                    this.owner = owner
+                }
+
+                for (var i = 0; i < results.data.length; i++){
+                    var newProduct = new PreparedObject(
+                        results.data[i][0],
+                        results.data[i][1],
+                        results.data[i][2],
+                        results.data[i][3],
+                        null,
+                        null,
+                        null,
+                        Meteor.userId()
+                    );
+
+                    console.log("Adding product: " + newProduct.name);
+                    Products.insert(newProduct);
+                }
+            }
+        });
+
+    }
+});
 
 function csvToObject(data) {
     var parsedData = Papa.parse(data);
