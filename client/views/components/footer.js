@@ -25,8 +25,9 @@ if (Meteor.isClient) {
                 Session.set("currentProduct", "");
         },
 
-        "click .visualize": function() {
-            Session.set("currentProduct", "");
+        "click .dashupload": function() {
+            alert("clicked");
+            $(".uploader").trigger("change");
         }
     });
 }

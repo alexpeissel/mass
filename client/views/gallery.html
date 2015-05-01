@@ -27,17 +27,15 @@
 
 <template name="photoTile">
     <div class="photo_tile">
-        <div class="col-xs-6 col-sm-3">
-            <div>
-                <img src="{{this.url store='thumbnail' uploading='/images/hex.gif' storing='/images/hex.gif'}}" alt=""
-                     class="thumbnail"/>
-
-                <div class="after">
-                   <div class="trimmable">Delete {{this.name}}: </div>
-                    {{#FS.DeleteButton class="btn btn-danger btn-xs"}}Delete{{/FS.DeleteButton}}
+        <div class="col-xs-6 col-sm-4">
+            <div class="thumbnail">
+                <img src="{{this.url store='thumbnail' uploading='/images/hex.gif' storing='/images/hex.gif'}}" class="img-responsive">
+                <div class="caption">
+                    <div class="trimmable"><strong>{{this.name}}:</strong></div>
+                    {{#FS.DeleteButton class="btn btn-danger btn-xs"}}<span class="glyphicon glyphicon-remove"></span> Delete{{/FS.DeleteButton}}
+                </div>
                 </div>
             </div>
         </div>
-    </div>
 
 </template>
